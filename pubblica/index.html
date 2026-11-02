@@ -1,0 +1,888 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#04090A">
+<title>Sempre in Linea · La segretaria AI che non stacca mai</title>
+<meta name="description" content="Una segretaria AI che risponde al telefono della tua azienda 24 ore su 24. Programma pilota: 2 settimane gratis, solo 3 posti fino al 20 novembre.">
+
+<!-- Anteprima link (WhatsApp, Telegram, social). og:image e og:url vengono aggiornati da render.mjs con CONFIG.SITE_URL -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="it_IT">
+<meta property="og:site_name" content="Sempre in Linea">
+<meta property="og:title" content="Quante chiamate hai perso questa settimana?">
+<meta property="og:description" content="Chiama e parla con la segretaria AI. Pilota gratuito, solo 3 posti.">
+<meta property="og:url" content="https://example.com/">
+<meta property="og:image" content="https://example.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Sempre in Linea: quante chiamate hai perso questa settimana? Pilota gratuito, chiude il 20 novembre.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Quante chiamate hai perso questa settimana?">
+<meta name="twitter:description" content="Chiama e parla con la segretaria AI. Pilota gratuito, solo 3 posti.">
+<meta name="twitter:image" content="https://example.com/og-image.png">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2304090A'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%232CCFAE'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- font caricati senza bloccare il primo disegno della pagina -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap"></noscript>
+
+<style>
+/* fallback con metriche simili ai font veri: evitano che il testo salti quando i font arrivano */
+@font-face { font-family: "Serif Fallback"; src: local("Times New Roman"), local("TimesNewRomanPSMT"), local("Times"); size-adjust: 85%; ascent-override: 98%; descent-override: 26%; }
+@font-face { font-family: "Sans Fallback"; src: local("Arial"), local("ArialMT"), local("Helvetica"); size-adjust: 95%; }
+@font-face { font-family: "Mono Fallback"; src: local("Courier New"), local("CourierNewPSMT"); size-adjust: 100%; }
+
+:root {
+  --bg: #04090A;
+  --bg-2: #0A1414;
+  --surface: #0F1A1A;
+  --border: #1C2B2A;
+  --text: #EEF4F2;
+  --muted: #8FA3A0;
+  --teal: #2CCFAE;
+  --teal-glow: rgba(44, 207, 174, 0.35);
+  --alarm: #FF2B2B;
+  --alarm-glow: rgba(255, 43, 43, 0.45);
+
+  --alarm-dim: #5A1717;
+  --ink-on-teal: #03110E;
+  --soft: #C3D0CD;
+
+  --serif: "Instrument Serif", "Serif Fallback", Georgia, serif;
+  --sans: "Inter Tight", "Sans Fallback", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", "Mono Fallback", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --gutter: 16px;
+  --col: 560px;
+  --radius: 16px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 56px; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 400 17px/1.55 var(--sans);
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, ul, ol { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; border-radius: 6px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+[hidden] { display: none !important; }
+
+.wrap { width: 100%; max-width: calc(var(--col) + 2 * var(--gutter)); margin: 0 auto; padding: 0 var(--gutter); position: relative; }
+
+/* ---------- tipografia ---------- */
+h1, h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+h1 em, h2 em { font-style: italic; color: var(--teal); padding-right: 0.06em; }
+h2 { font-size: clamp(31px, 8.6vw, 42px); line-height: 1.06; }
+.eyebrow {
+  font: 500 12.5px/1 var(--mono);
+  color: var(--teal);
+  letter-spacing: 0.02em;
+  margin-bottom: 16px;
+}
+.lead { color: var(--soft); text-wrap: pretty; }
+
+/* ---------- barra countdown in alto ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 30;
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px;
+  height: 44px;
+  padding: 0 max(var(--gutter), calc((100% - var(--col)) / 2));
+  background: #000;
+  border-bottom: 1px solid var(--alarm);
+  font: 500 11.5px/1 var(--mono);
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+  color: var(--soft);
+}
+.tb-live { display: flex; align-items: center; gap: 8px; white-space: nowrap; min-width: 0; }
+.tb-time { justify-self: center; color: var(--alarm); font-weight: 700; font-size: 13.5px; letter-spacing: 0.01em; text-shadow: 0 0 10px var(--alarm-glow); white-space: nowrap; }
+.tb-spots { justify-self: end; white-space: nowrap; }
+.tb-spots b { color: var(--alarm); font-weight: 700; }
+.tb-closed { grid-column: 1 / -1; justify-self: center; color: #fff; font: 500 13px/1 var(--mono); }
+.topbar.is-closed { border-bottom-color: #2a2a2a; }
+.rdot {
+  width: 8px; height: 8px; border-radius: 50%; flex: none;
+  background: var(--alarm); box-shadow: 0 0 8px var(--alarm-glow);
+}
+
+/* ---------- hero ---------- */
+.hero { position: relative; overflow: clip; padding: 12px 0 8px; isolation: isolate; }
+.hero::before, .hero::after { content: ""; position: absolute; pointer-events: none; z-index: -1; }
+/* arco di luce: un anello enorme di cui si vede solo la parte bassa */
+.hero::before {
+  left: 50%; top: 0;
+  width: max(640px, 150vw); max-width: 1500px; aspect-ratio: 1;
+  transform: translate(-50%, -71%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+    rgba(44, 207, 174, 0) 70%,
+    rgba(44, 207, 174, 0.08) 82%,
+    rgba(44, 207, 174, 0.42) 92%,
+    rgba(120, 240, 214, 0.85) 96.5%,
+    rgba(44, 207, 174, 0) 100%);
+  filter: blur(9px);
+}
+/* foschia che sale dall'arco */
+.hero::after {
+  inset: 0 0 auto 0; height: 560px;
+  background:
+    radial-gradient(ellipse 60% 55% at 50% 0%, rgba(44, 207, 174, 0.20), rgba(44, 207, 174, 0) 72%),
+    linear-gradient(180deg, rgba(4, 9, 10, 0) 70%, var(--bg));
+}
+.hero-dots {
+  position: absolute; inset: 520px 0 0 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(rgba(143, 163, 160, 0.16) 1px, transparent 1.6px) 0 0 / 16px 16px;
+  -webkit-mask: linear-gradient(180deg, transparent, #000 25%, #000 60%, transparent);
+          mask: linear-gradient(180deg, transparent, #000 25%, #000 60%, transparent);
+}
+
+.brand { display: flex; align-items: center; justify-content: space-between; height: 40px; }
+.logo { font: 400 23px/1 var(--serif); letter-spacing: -0.005em; color: var(--text); }
+.live { display: inline-flex; align-items: center; gap: 8px; font: 500 12px/1 var(--mono); color: var(--soft); }
+.tdot {
+  position: relative; width: 8px; height: 8px; border-radius: 50%; flex: none;
+  background: var(--teal); box-shadow: 0 0 10px var(--teal-glow);
+}
+.tdot::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  background: var(--teal); opacity: 0;
+}
+
+.hero h1 {
+  margin-top: 26px;
+  text-align: center;
+  font-size: clamp(37px, 10.6vw, 56px);
+  line-height: 1.04;
+  padding-bottom: 2px;
+}
+.hero .lead strong { font-weight: 500; color: var(--text); }
+.hero .lead { text-align: center; margin: 12px auto 0; max-width: 31em; font-size: 16.5px; line-height: 1.5; }
+
+/* ---------- countdown ---------- */
+.cd { margin-top: 22px; text-align: center; }
+.cd-label {
+  font: 500 12.5px/1 var(--mono); color: var(--alarm);
+  letter-spacing: 0.02em; margin-bottom: 10px;
+}
+.tiles { display: flex; justify-content: center; align-items: flex-start; gap: 4px; }
+.tile { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.val {
+  display: grid; place-items: center;
+  width: clamp(62px, 17.6vw, 86px); height: clamp(62px, 17vw, 78px);
+  background: #000;
+  border: 1px solid var(--alarm-dim);
+  border-radius: 12px;
+  overflow: hidden;
+  font: 700 clamp(36px, 10.8vw, 46px)/1 var(--mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--alarm);
+  text-shadow: 0 0 16px var(--alarm-glow), 0 0 2px rgba(255, 43, 43, 0.5);
+  transition: border-color 0.4s, box-shadow 0.4s;
+}
+.val > span { grid-area: 1 / 1; }
+.val > .in { animation: digIn 0.25s var(--ease); }
+.val > .out { animation: digOut 0.25s var(--ease) forwards; }
+@keyframes digIn { from { transform: translateY(70%); opacity: 0; } }
+@keyframes digOut { to { transform: translateY(-70%); opacity: 0; } }
+.unit { font: 500 11.5px/1 var(--mono); color: var(--muted); letter-spacing: 0.03em; }
+.sep {
+  font: 700 22px/1 var(--mono); color: var(--alarm); opacity: 0.85;
+  height: clamp(62px, 17vw, 78px); display: grid; place-items: center; width: 12px;
+}
+/* ultime 48 ore: bordo rosso pieno */
+[data-urgency="48h"] .val, [data-urgency="day"] .val {
+  border-color: var(--alarm);
+  box-shadow: 0 0 18px -6px var(--alarm-glow), inset 0 0 14px -8px var(--alarm-glow);
+}
+/* ultimo giorno: spariscono i giorni, le ore in evidenza */
+[data-urgency="day"] [data-unit="d"], [data-urgency="day"] [data-unit="d"] + .sep { display: none; }
+[data-urgency="day"] [data-unit="h"] .val { background: #1a0303; box-shadow: 0 0 28px -4px var(--alarm-glow); }
+
+.spots {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  margin-top: 14px;
+  font: 500 13.5px/1.2 var(--mono); color: var(--soft);
+}
+.spots b { color: var(--alarm); font-weight: 700; }
+.dots { display: inline-flex; gap: 6px; }
+.dots i {
+  width: 10px; height: 10px; border-radius: 50%;
+  border: 1.5px solid var(--muted);
+}
+.dots i.free { background: var(--alarm); border-color: var(--alarm); box-shadow: 0 0 8px var(--alarm-glow); }
+
+/* ---------- pulsante principale ---------- */
+.call {
+  position: relative;
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  width: 100%; min-height: 60px;
+  padding: 9px 20px;
+  border-radius: 14px;
+  background: var(--teal);
+  color: var(--ink-on-teal);
+  text-decoration: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 10px 30px -10px var(--teal-glow);
+  transition: transform 0.15s var(--ease), background-color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.call:hover { background: #3ddcbb; }
+.call:active { transform: scale(0.98); }
+.call::after {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit;
+  border: 1.5px solid var(--teal); opacity: 0; pointer-events: none;
+}
+.call-ic { display: grid; place-items: center; width: 26px; height: 26px; flex: none; }
+.call-ic svg { width: 24px; height: 24px; }
+.call-tx { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; min-width: 0; }
+.call-main { font: 600 17.5px/1.15 var(--sans); letter-spacing: -0.005em; }
+.call-num { font: 500 13px/1 var(--mono); color: #0A3D33; font-variant-numeric: tabular-nums; }
+.hero .call { margin-top: 14px; }
+.micro { margin: 12px auto 0; max-width: 30em; text-align: center; font-size: 14px; line-height: 1.5; color: var(--muted); text-wrap: balance; }
+
+/* ---------- card chiamata in corso ---------- */
+.callcard {
+  margin-top: 40px;
+  background: linear-gradient(180deg, rgba(23, 38, 37, 0.9), rgba(12, 22, 22, 0.92));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 16px 14px;
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.8);
+}
+.cc-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; font: 500 12px/1 var(--mono); color: var(--soft); font-variant-numeric: tabular-nums; }
+.cc-status { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.cc-tag { color: var(--muted); white-space: nowrap; }
+@media (max-width: 400px) { .cc-tag { display: none; } }
+.wave {
+  display: flex; align-items: center; justify-content: space-between; gap: 2px;
+  height: 84px; margin: 18px 0 14px;
+}
+.wave i {
+  flex: 1 1 0; max-width: 5px; min-width: 2px;
+  height: calc(var(--h) * 100%);
+  border-radius: 2px;
+  background: var(--teal);
+  opacity: var(--o, 1);
+  transform-origin: 50% 50%;
+}
+.cc-bottom { display: flex; align-items: center; gap: 14px; }
+.cc-times { flex: 1; display: flex; justify-content: space-between; font: 500 11.5px/1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.cc-btn {
+  display: grid; place-items: center; flex: none;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--teal); color: var(--ink-on-teal);
+  box-shadow: 0 0 22px -4px var(--teal-glow);
+  transition: transform 0.15s var(--ease);
+}
+.cc-btn:active { transform: scale(0.94); }
+.cc-btn svg { width: 20px; height: 20px; }
+
+/* ---------- sezioni ---------- */
+section { position: relative; padding: 76px 0; }
+section.alt { background: var(--bg-2); }
+.sec-text { margin-top: 18px; font-size: 17px; }
+
+/* il problema */
+.problem h2 { max-width: 15em; }
+
+/* cosa fa */
+.feats { display: grid; gap: 12px; margin-top: 32px; }
+.feat {
+  display: grid; grid-template-columns: 44px 1fr; gap: 4px 16px; align-items: start;
+  padding: 20px 18px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+}
+.feat-ic {
+  grid-row: span 2;
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px;
+  background: rgba(44, 207, 174, 0.08); border: 1px solid rgba(44, 207, 174, 0.22); color: var(--teal);
+}
+.feat-ic svg { width: 22px; height: 22px; }
+.feat h3 { font: 600 18px/1.3 var(--sans); letter-spacing: -0.005em; }
+.feat p { color: var(--soft); font-size: 16px; line-height: 1.5; }
+
+/* come si parte */
+.steps { margin-top: 34px; display: grid; gap: 0; counter-reset: s; }
+.step { position: relative; display: grid; grid-template-columns: 40px 1fr; gap: 16px; padding-bottom: 28px; }
+.step:last-child { padding-bottom: 0; }
+.step::before {
+  counter-increment: s; content: counter(s);
+  display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%;
+  background: var(--bg); border: 1px solid var(--teal);
+  font: 700 15px/1 var(--mono); color: var(--teal);
+  position: relative; z-index: 1;
+}
+.step:not(:last-child)::after {
+  content: ""; position: absolute; left: 19.5px; top: 40px; bottom: 0; width: 1px;
+  background: linear-gradient(180deg, var(--teal), rgba(44, 207, 174, 0.15));
+}
+.step p { padding-top: 8px; color: var(--soft); }
+
+/* programma pilota */
+.pilot-sec { padding-top: 84px; }
+.pilot {
+  position: relative;
+  padding: 22px 18px 20px;
+  border-radius: var(--radius);
+  border: 1px solid var(--teal);
+  background:
+    radial-gradient(ellipse 90% 45% at 50% 0%, rgba(44, 207, 174, 0.13), rgba(44, 207, 174, 0) 70%),
+    var(--surface);
+  box-shadow: 0 0 0 4px rgba(44, 207, 174, 0.07), 0 0 70px -12px var(--teal-glow);
+}
+.pilot .cd { margin-top: 0; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+.pilot .val { width: clamp(52px, 14vw, 64px); height: 54px; font-size: clamp(27px, 7.6vw, 32px); border-radius: 10px; }
+.pilot .sep { height: 54px; font-size: 18px; width: 10px; }
+.pilot .eyebrow { margin: 22px 0 12px; }
+.pilot h2 { font-size: clamp(30px, 8.2vw, 40px); }
+.pilot .sec-text { font-size: 16.5px; }
+.checks { margin-top: 20px; display: grid; gap: 12px; }
+.checks li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; font-weight: 500; line-height: 1.4; }
+.checks svg { width: 22px; height: 22px; color: var(--teal); margin-top: -1px; }
+.pilot .spots { justify-content: flex-start; margin-top: 22px; }
+.deadline { margin-top: 10px; font: 500 13.5px/1.3 var(--mono); color: var(--soft); }
+.pilot .call { margin-top: 18px; }
+.pilot .call-main { font-size: 16.5px; }
+/* modalità chiuso */
+.is-closed .pilot {
+  border-color: var(--border);
+  background: var(--surface);
+  box-shadow: none;
+}
+.is-closed .pilot .eyebrow { color: var(--muted); }
+.is-closed .pilot h2 { color: var(--soft); }
+.is-closed [data-open-only] { display: none !important; }
+
+/* per chi è */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
+.chip {
+  padding: 10px 14px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--surface);
+  font-size: 15.5px; font-weight: 500; line-height: 1.2; color: var(--text);
+}
+.note { margin-top: 22px; color: var(--soft); font-size: 16px; }
+
+/* chi c'è dietro */
+.who { display: grid; grid-template-columns: 76px 1fr; gap: 18px; align-items: start; margin-top: 26px; }
+.avatar {
+  width: 76px; height: 76px; border-radius: 50%; overflow: hidden;
+  display: grid; place-items: center;
+  background: radial-gradient(circle at 30% 25%, #1d3a36, var(--surface));
+  border: 1px solid rgba(44, 207, 174, 0.35);
+  font: 400 30px/1 var(--serif); color: var(--teal); letter-spacing: 0.02em;
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.who p { color: var(--soft); }
+
+/* CTA finale */
+.final { padding: 110px 0 96px; overflow: clip; text-align: center; isolation: isolate; }
+.final::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  left: 50%; top: 58%; width: 190%; max-width: 1600px; height: 340px;
+  transform: translate(-50%, -50%);
+  background:
+    radial-gradient(ellipse 46% 16% at 50% 50%, rgba(120, 240, 214, 0.55), rgba(44, 207, 174, 0) 100%),
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(44, 207, 174, 0.5), rgba(44, 207, 174, 0.14) 52%, rgba(44, 207, 174, 0) 74%);
+  filter: blur(18px);
+}
+.final::after {
+  content: ""; position: absolute; inset: 0; z-index: -2; pointer-events: none;
+  background: radial-gradient(rgba(143, 163, 160, 0.16) 1px, transparent 1.6px) 0 0 / 16px 16px;
+  -webkit-mask: radial-gradient(ellipse 70% 60% at 50% 50%, #000, transparent);
+          mask: radial-gradient(ellipse 70% 60% at 50% 50%, #000, transparent);
+}
+.final h2 { font-size: clamp(34px, 9.6vw, 48px); line-height: 1.05; }
+.final .call { margin-top: 30px; min-height: 64px; }
+.final .call-main { font-size: 19px; }
+.final-line { margin-top: 16px; font: 500 13.5px/1.4 var(--mono); color: var(--soft); }
+.final-line b { color: var(--alarm); }
+
+footer {
+  padding: 28px 0 calc(32px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+  font-size: 14px; color: var(--muted); text-align: center;
+}
+
+/* ---------- barra fissa in basso ---------- */
+.dock {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+  padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom));
+  background: rgba(4, 9, 10, 0.94);
+  border-top: 1px solid var(--border);
+  transform: translateY(110%);
+  transition: transform 0.35s var(--ease);
+}
+.dock.show { transform: none; }
+.dock .call { max-width: var(--col); margin: 0 auto; min-height: 56px; }
+
+/* ---------- desktop ---------- */
+@media (min-width: 720px) {
+  section { padding: 104px 0; }
+  .hero { padding-top: 20px; }
+  .hero h1 { margin-top: 44px; }
+  .hero::before { width: min(150vw, 1100px); transform: translate(-50%, -80%); }
+  .hero .lead { font-size: 18px; }
+  .pilot { padding: 28px 28px 26px; }
+  .feat { padding: 24px; }
+}
+
+/* ---------- movimento (solo se l'utente non lo ha disattivato) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .rdot { animation: blink 1.6s ease-in-out infinite; }
+  .tdot::after { animation: ping 2.4s var(--ease) infinite; }
+  .sep { animation: sepBlink 2s ease-in-out infinite; }
+  .call::after { animation: ring 2.5s var(--ease) infinite; }
+  .call-ic svg { animation: buzz 4s ease-in-out infinite; transform-origin: 50% 60%; }
+  .wave i { animation: talk var(--t, 1.6s) ease-in-out infinite; animation-delay: var(--d, 0s); }
+
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+  }
+}
+@keyframes blink { 50% { opacity: 0.25; } }
+@keyframes sepBlink { 50% { opacity: 0.3; } }
+@keyframes ping { 0% { transform: scale(1); opacity: 0.7; } 80%, 100% { transform: scale(2.8); opacity: 0; } }
+@keyframes ring { 0% { transform: scale(1); opacity: 0.7; } 70%, 100% { transform: scale(1.035, 1.32); opacity: 0; } }
+@keyframes buzz {
+  0%, 78%, 100% { transform: rotate(0); }
+  80% { transform: rotate(-14deg); } 83% { transform: rotate(13deg); }
+  86% { transform: rotate(-11deg); } 89% { transform: rotate(9deg); }
+  92% { transform: rotate(-5deg); } 95% { transform: rotate(0); }
+}
+@keyframes talk { 50% { transform: scaleY(0.45); } }
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .val > .in, .val > .out { animation: none; }
+  .dock { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<a class="topbar" id="topbar" href="#pilota">
+  <span class="tb-live"><span class="rdot" aria-hidden="true"></span><span id="tb-label">Pilota chiude tra</span></span>
+  <span class="tb-time" id="tb-time" aria-hidden="true">--g --:--:--</span>
+  <span class="tb-spots" id="tb-spots"></span>
+  <span class="tb-closed" id="tb-closed" hidden></span>
+</a>
+
+<header class="hero">
+  <div class="hero-dots" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="brand">
+      <span class="logo">Sempre in Linea</span>
+      <span class="live"><span class="tdot" aria-hidden="true"></span>Linea attiva</span>
+    </div>
+
+    <h1>Quante chiamate hai <em>perso</em> questa settimana?</h1>
+    <p class="lead">Ognuna era un cliente che poi ha chiamato qualcun altro. <strong>Sempre in Linea è una segretaria costruita con l'intelligenza artificiale</strong>: risponde al tuo telefono quando tu non puoi.</p>
+
+    <div class="cd" data-countdown data-open-only aria-live="off">
+      <p class="cd-label" data-cd-label>Il programma pilota chiude tra</p>
+      <p class="sr-only" data-deadline-text>Chiude il 20 novembre alle 23:59</p>
+      <div class="tiles" aria-hidden="true">
+        <div class="tile" data-unit="d"><div class="val"></div><span class="unit">giorni</span></div>
+        <span class="sep">:</span>
+        <div class="tile" data-unit="h"><div class="val"></div><span class="unit">ore</span></div>
+        <span class="sep">:</span>
+        <div class="tile" data-unit="m"><div class="val"></div><span class="unit">min</span></div>
+        <span class="sep">:</span>
+        <div class="tile" data-unit="s"><div class="val"></div><span class="unit">sec</span></div>
+      </div>
+      <p class="spots"><span class="dots" data-dots aria-hidden="true"></span><span data-spots-text></span></p>
+    </div>
+
+    <a class="call" id="hero-call" data-tel href="#">
+      <span class="call-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span>
+      <span class="call-tx"><span class="call-main">Chiama ora e parla con lei</span><span class="call-num" data-phone></span></span>
+    </a>
+    <p class="micro">Ti risponde la segretaria AI. Mettila alla prova: fai domande, interrompila, cambia idea a metà frase.</p>
+
+    <div class="callcard reveal">
+      <div class="cc-top">
+        <span class="cc-status"><span class="tdot" aria-hidden="true"></span>Chiamata in arrivo · <span data-call-timer>00:42</span></span>
+        <span class="cc-tag">Segretaria AI</span>
+      </div>
+      <div class="wave" data-bars="64" aria-hidden="true"></div>
+      <div class="cc-bottom">
+        <div class="cc-times" aria-hidden="true"><span>0:00</span><span>0:30</span><span>1:00</span><span>1:30</span><span>2:00</span></div>
+        <a class="cc-btn" data-tel data-label="Chiama la segretaria AI" href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="problem">
+    <div class="wrap reveal">
+      <p class="eyebrow">- Il problema -</p>
+      <h2>Il telefono squilla sempre nel momento <em>sbagliato</em></h2>
+      <p class="sec-text lead">Sei sotto un lavandino, in riunione, con un paziente. Rispondi più tardi, ma spesso chi ha chiamato non ha lasciato un messaggio: ha cercato il numero successivo su Google.</p>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="eyebrow">- Cosa fa -</p>
+        <h2>Fa il lavoro di una segretaria. Solo che non va mai in <em>pausa pranzo.</em></h2>
+      </div>
+      <ul class="feats">
+        <li class="feat reveal">
+          <span class="feat-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <h3>Risponde sempre</h3>
+          <p>24 ore su 24, sabato e domenica compresi. Anche quando la linea è già occupata.</p>
+        </li>
+        <li class="feat reveal">
+          <span class="feat-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M16 3v4M8 3v4M4 11h16"/><path d="m9 16 2 2 4-4"/></svg></span>
+          <h3>Fissa appuntamenti e prende le richieste</h3>
+          <p>Chiede nome, motivo e urgenza. Segna l'appuntamento e ti passa tutto già in ordine.</p>
+        </li>
+        <li class="feat reveal">
+          <span class="feat-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m9 15 6-6"/><path d="m11 6 .46-.54a5 5 0 0 1 7.08 7.08L18 13"/><path d="m13 18-.4.53a5.07 5.07 0 0 1-7.13 0 4.97 4.97 0 0 1 0-7.07L6 11"/></svg></span>
+          <h3>Lavora con i tuoi strumenti</h3>
+          <p>Si collega al tuo calendario e al tuo gestionale, così non devi ricopiare niente.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="reveal">
+        <p class="eyebrow">- Come funziona -</p>
+        <h2>Come si <em>parte</em></h2>
+      </div>
+      <ol class="steps">
+        <li class="step reveal"><p>Ci sentiamo per una breve chiamata. Mi racconti come lavori e cosa chiedono di solito i tuoi clienti.</p></li>
+        <li class="step reveal"><p>Preparo la tua segretaria: come si presenta, cosa risponde, i tuoi orari, il tuo calendario.</p></li>
+        <li class="step reveal"><p>Colleghiamo il tuo numero. Da quel momento, quando tu non puoi, risponde lei.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="pilot-sec" id="pilota">
+    <div class="wrap">
+      <div class="pilot reveal">
+        <div class="cd" data-countdown data-open-only aria-live="off">
+          <p class="cd-label" data-cd-label>Il programma pilota chiude tra</p>
+          <p class="sr-only" data-deadline-text>Chiude il 20 novembre alle 23:59</p>
+          <div class="tiles" aria-hidden="true">
+            <div class="tile" data-unit="d"><div class="val"></div><span class="unit">giorni</span></div>
+            <span class="sep">:</span>
+            <div class="tile" data-unit="h"><div class="val"></div><span class="unit">ore</span></div>
+            <span class="sep">:</span>
+            <div class="tile" data-unit="m"><div class="val"></div><span class="unit">min</span></div>
+            <span class="sep">:</span>
+            <div class="tile" data-unit="s"><div class="val"></div><span class="unit">sec</span></div>
+          </div>
+        </div>
+
+        <p class="eyebrow">- Programma pilota · solo <span data-total>3</span> aziende -</p>
+        <h2 id="pilot-title">Provala sul tuo numero. <em>Gratis</em> per 2 settimane.</h2>
+        <p class="sec-text lead" id="pilot-text">Cerco <span data-total>3</span> aziende con cui partire. Per 2 settimane la segretaria risponde ai tuoi clienti veri e tu non paghi niente. Se poi decidi di continuare, il primo mese è soddisfatto o rimborsato: se non ti convince, ti restituisco quello che hai pagato.</p>
+
+        <ul class="checks" data-open-only>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg>2 settimane gratis, sul tuo numero</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg>Configurazione fatta da me, inclusa</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg>Garanzia primo mese: soddisfatto o rimborsato</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg>Nessun vincolo: finite le 2 settimane, decidi tu</li>
+        </ul>
+
+        <p class="spots" data-open-only><span class="dots" data-dots aria-hidden="true"></span><span data-spots-text></span></p>
+        <p class="deadline" data-open-only>Candidature entro <span data-deadline-day>venerdì 20 novembre</span></p>
+
+        <a class="call" id="pilot-call" data-tel href="#">
+          <span class="call-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span>
+          <span class="call-tx"><span class="call-main">Chiama e chiedi di entrare nel pilota</span><span class="call-num" data-phone></span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap reveal">
+      <p class="eyebrow">- Per chi è -</p>
+      <h2>Fa per te se il telefono squilla <em>tanto</em></h2>
+      <ul class="chips">
+        <li class="chip">Studi medici e dentistici</li>
+        <li class="chip">Idraulici, elettricisti, fabbri</li>
+        <li class="chip">Ristoranti</li>
+        <li class="chip">Centri estetici e parrucchieri</li>
+        <li class="chip">Studi professionali</li>
+      </ul>
+      <p class="note">Non vedi il tuo settore? Chiama e chiedi: se ricevi molte telefonate, probabilmente funziona anche per te.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap reveal">
+      <p class="eyebrow">- Chi sono -</p>
+      <h2>Chi c'è dietro</h2>
+      <div class="who">
+        <div class="avatar" id="avatar" aria-hidden="true">MP</div>
+        <p>Sono Marco Pontone, da Roma. Costruisco e seguo personalmente ogni segretaria. Se qualcosa non va, parli con me, non con un call center.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="final" id="finale">
+    <div class="wrap">
+      <p class="eyebrow">- Prova adesso -</p>
+      <h2>Il modo più veloce per capire se funziona è <em>chiamarla.</em></h2>
+      <a class="call" id="final-call" data-tel href="#">
+        <span class="call-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span>
+        <span class="call-tx"><span class="call-main">Chiama ora</span><span class="call-num" data-phone></span></span>
+      </a>
+      <p class="final-line" data-open-only>Il pilota chiude <span data-deadline-day>venerdì 20 novembre</span>. <span data-final-spots></span></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Sempre in Linea · Marco Pontone · Roma<span id="piva"></span></div>
+</footer>
+
+<div class="dock" id="dock" inert>
+  <a class="call" data-tel href="#">
+    <span class="call-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span>
+    <span class="call-tx"><span class="call-main">Chiama ora</span><span class="call-num" data-phone></span></span>
+  </a>
+</div>
+
+<script>
+/* =====================================================================
+   CONFIGURAZIONE: tutto quello che cambi a mano sta qui.
+   locandina.html e og.html leggono questi stessi valori (render.mjs li
+   copia in config.js), quindi modifica solo questo blocco.
+   ===================================================================== */
+const CONFIG = {
+  PHONE_TEL: "+390698237052",            // formato per il link tel:
+  PHONE_DISPLAY: "06 9823 7052",         // come appare a schermo
+  DEADLINE: "2026-11-20T23:59:59+01:00", // fine pilota, ora di Roma
+  SPOTS_TOTAL: 3,                        // posti totali del pilota
+  SPOTS_LEFT: 3,                         // lo aggiorno a mano quando entra un'azienda
+  SITE_URL: "https://example.com",       // serve per og:image assoluta (senza / finale)
+  PIVA: "18735981005",                   // se vuota, non viene mostrata
+  PHOTO: ""                              // es. "marco.jpg"; se vuota, restano le iniziali MP
+};
+
+(function () {
+  "use strict";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var root = document.documentElement;
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  var total = Math.max(0, Number(CONFIG.SPOTS_TOTAL) || 0);
+  var left = Math.min(total, Math.max(0, Number(CONFIG.SPOTS_LEFT) || 0));
+  var deadline = new Date(CONFIG.DEADLINE).getTime();
+
+  /* ---------- date della scadenza, sempre in ora di Roma ---------- */
+  function fmt(opts) {
+    return new Intl.DateTimeFormat("it-IT", Object.assign({ timeZone: "Europe/Rome" }, opts)).format(deadline);
+  }
+  var dayLong = fmt({ weekday: "long", day: "numeric", month: "long" });  // venerdì 20 novembre
+  var dayShort = fmt({ day: "numeric", month: "long" });                  // 20 novembre
+  var hourMin = fmt({ hour: "2-digit", minute: "2-digit" });              // 23:59
+  var deadlineText = "Chiude il " + dayShort + " alle " + hourMin;
+
+  $$("[data-deadline-day]").forEach(function (el) { el.textContent = dayLong; });
+  $$("[data-deadline-text]").forEach(function (el) { el.textContent = deadlineText; });
+  $$("[data-total]").forEach(function (el) { el.textContent = total; });
+
+  /* ---------- telefono: unico punto in cui il numero entra nella pagina ---------- */
+  $$("[data-phone]").forEach(function (el) { el.textContent = CONFIG.PHONE_DISPLAY; });
+  function labelCalls() {
+    $$("[data-tel]").forEach(function (a) {
+      a.href = "tel:" + CONFIG.PHONE_TEL;
+      var main = a.getAttribute("data-label") || ($(".call-main", a) || a).textContent;
+      a.setAttribute("aria-label", main + ", " + CONFIG.PHONE_DISPLAY);
+    });
+  }
+  labelCalls();
+
+  /* ---------- P.IVA e foto ---------- */
+  if (CONFIG.PIVA) $("#piva").textContent = " · P.IVA " + CONFIG.PIVA;
+  if (CONFIG.PHOTO) {
+    var av = $("#avatar");
+    av.innerHTML = "";
+    var img = new Image();
+    img.src = CONFIG.PHOTO; img.alt = ""; img.width = 76; img.height = 76; img.decoding = "async";
+    av.appendChild(img);
+  }
+
+  /* ---------- posti ---------- */
+  function spotsSentence() {
+    return left === 1
+      ? "Resta <b>1</b> posto su " + total
+      : "Restano <b>" + left + "</b> posti su " + total;
+  }
+  $$("[data-spots-text]").forEach(function (el) { el.innerHTML = spotsSentence(); });
+  $$("[data-dots]").forEach(function (el) {
+    var html = "";
+    for (var i = 0; i < total; i++) html += '<i class="' + (i < left ? "free" : "") + '"></i>';
+    el.innerHTML = html;
+  });
+  $$("[data-final-spots]").forEach(function (el) {
+    el.innerHTML = left === 1 ? "Resta <b>1</b> posto." : "Restano <b>" + left + "</b> posti.";
+  });
+  $("#tb-spots").innerHTML = "<b>" + left + "</b> " + (left === 1 ? "posto" : "posti");
+  $("#topbar").setAttribute("aria-label",
+    "Programma pilota. " + deadlineText + ". " + (left === 1 ? "Resta 1 posto" : "Restano " + left + " posti") + ". Vai ai dettagli");
+
+  /* ---------- countdown ---------- */
+  var groups = $$("[data-countdown]").map(function (cd) {
+    return {
+      cd: cd,
+      label: $("[data-cd-label]", cd),
+      d: $('[data-unit="d"] .val', cd),
+      h: $('[data-unit="h"] .val', cd),
+      m: $('[data-unit="m"] .val', cd),
+      s: $('[data-unit="s"] .val', cd)
+    };
+  });
+  var tbTime = $("#tb-time"), tbLabel = $("#tb-label");
+
+  // Cambia solo la tessera la cui cifra è cambiata: la vecchia esce in alto, la nuova entra dal basso.
+  function setVal(el, text) {
+    if (el.getAttribute("data-v") === text) return;
+    el.setAttribute("data-v", text);
+    $$(".out", el).forEach(function (o) { o.remove(); });
+    var old = $(".cur", el);
+    var next = document.createElement("span");
+    next.className = "cur";
+    next.textContent = text;
+    if (old) {
+      old.className = "out";
+      if (reduceMotion.matches) old.remove();
+      else old.addEventListener("animationend", function () { old.remove(); }, { once: true });
+      if (!reduceMotion.matches) next.className = "cur in";
+    }
+    el.appendChild(next);
+  }
+
+  function pad(n) { return String(n).padStart(2, "0"); }
+
+  var timer = null;
+  function tick() {
+    var ms = deadline - Date.now();   // sempre ricalcolato dall'ora reale
+    if (!(ms > 0)) { closePilot("time"); return; }
+    var t = Math.floor(ms / 1000);
+    var d = Math.floor(t / 86400), h = Math.floor((t % 86400) / 3600), m = Math.floor((t % 3600) / 60), s = t % 60;
+
+    var urgency = t < 86400 ? "day" : t < 172800 ? "48h" : "";
+    if (root.getAttribute("data-urgency") !== urgency) {
+      root.setAttribute("data-urgency", urgency);
+      tbLabel.textContent = urgency === "day" ? "Ultimo giorno" : urgency === "48h" ? "Ultimi 2 giorni" : "Pilota chiude tra";
+      groups.forEach(function (g) {
+        g.label.textContent = urgency === "day" ? "Ultimo giorno per candidarti" : "Il programma pilota chiude tra";
+      });
+    }
+
+    tbTime.textContent = (urgency === "day" ? "" : pad(d) + "g ") + pad(h) + ":" + pad(m) + ":" + pad(s);
+    groups.forEach(function (g) {
+      setVal(g.d, pad(d)); setVal(g.h, pad(h)); setVal(g.m, pad(m)); setVal(g.s, pad(s));
+    });
+  }
+
+  /* ---------- modalità "chiuso" (scadenza passata o posti finiti) ---------- */
+  function closePilot(reason) {
+    if (timer) { clearInterval(timer); timer = null; }
+    root.classList.add("is-closed");
+    root.removeAttribute("data-urgency");
+    var bar = $("#topbar"), msg = $("#tb-closed");
+    $$(".tb-live, .tb-time, .tb-spots", bar).forEach(function (el) { el.hidden = true; });
+    bar.classList.add("is-closed");
+    msg.hidden = false;
+    msg.textContent = reason === "spots" ? "Posti esauriti. Grazie a chi è entrato." : "Il programma pilota è chiuso.";
+    bar.setAttribute("aria-label", msg.textContent);
+
+    $("#pilot-title").textContent = "Il programma pilota è chiuso";
+    $("#pilot-text").textContent = "Puoi comunque chiamare la segretaria e sentire come funziona. Se ti interessa, lascia a lei il tuo nome e ti ricontatto.";
+    $("#pilot-call .call-main").textContent = "Chiama e prova la segretaria";
+    labelCalls();
+  }
+
+  if (left === 0) {
+    closePilot("spots");
+  } else {
+    tick();
+    if (!root.classList.contains("is-closed")) {
+      // si allinea al cambio del secondo, poi aggiorna ogni secondo
+      setTimeout(function () { tick(); timer = setInterval(tick, 1000); }, (deadline - Date.now()) % 1000 + 20);
+    }
+  }
+
+  /* ---------- onda sonora (decorativa) ---------- */
+  $$(".wave").forEach(function (w) {
+    var n = Number(w.getAttribute("data-bars")) || 56, html = "";
+    for (var i = 0; i < n; i++) {
+      var x = i / (n - 1);
+      var env = 0.35 + 0.65 * Math.sin(Math.PI * x);
+      var h = Math.max(0.08, env * (0.3 + 0.7 * Math.abs(Math.sin(i * 0.9) * Math.cos(i * 0.37 + 1))));
+      html += '<i style="--h:' + h.toFixed(2) + ";--d:-" + ((i * 0.137) % 1.6).toFixed(2) + "s;--t:" + (1.3 + (i % 5) * 0.12).toFixed(2) + "s" + (x > 0.62 ? ";--o:.38" : "") + '"></i>';
+    }
+    w.innerHTML = html;
+  });
+
+  /* ---------- timer della card "chiamata in arrivo" (decorativo) ---------- */
+  var callEl = $("[data-call-timer]");
+  if (callEl) {
+    var sec = 20 + Math.floor(Math.random() * 101);
+    var showCall = function () { callEl.textContent = pad(Math.floor(sec / 60)) + ":" + pad(sec % 60); };
+    showCall();
+    setInterval(function () { sec++; showCall(); }, 1000);
+  }
+
+  /* ---------- pulsante fisso in basso ---------- */
+  var dock = $("#dock"), heroCall = $("#hero-call"), finale = $("#finale");
+  if ("IntersectionObserver" in window) {
+    var heroGone = false, finalNear = false;
+    var update = function () {
+      var show = heroGone && !finalNear;
+      dock.classList.toggle("show", show);
+      if (show) dock.removeAttribute("inert"); else dock.setAttribute("inert", "");
+    };
+    new IntersectionObserver(function (e) {
+      heroGone = !e[0].isIntersecting && e[0].boundingClientRect.top < 0;
+      update();
+    }).observe(heroCall);
+    new IntersectionObserver(function (e) {
+      finalNear = e[0].isIntersecting || e[0].boundingClientRect.top < 0;
+      update();
+    }).observe(finale);
+  }
+})();
+</script>
+</body>
+</html>
