@@ -170,23 +170,17 @@ Non è un risponditore automatico con i tasti da premere. Si parla con lei come 
 {
   const s = pres.addSlide({ masterName: "Contenuto" });
   eyebrow(s, "A CHI SERVE");
-  s.addText([{ text: "Fa per te se il telefono squilla " }, teal("tanto")], { placeholder: "title", lang: "it-IT" });
+  s.addText([{ text: "Per chi non può perdere una " }, teal("chiamata")], { placeholder: "title", lang: "it-IT" });
 
-  const rows = [["Studi medici e dentistici", "Ristoranti"], ["Idraulici, elettricisti, fabbri", "Studi professionali"], ["Centri estetici e parrucchieri"]];
-  rows.forEach((row, r) => {
-    let x = M;
-    row.forEach((label) => {
-      const w = label.length * 0.098 + 0.55;
-      s.addShape(pres.shapes.ROUNDED_RECTANGLE, { objectName: `Settore ${label}`, x, y: 2.75 + r * 0.62, w, h: 0.46, rectRadius: 0.23, fill: { color: K.surface }, line: { color: K.border, width: 1 } });
-      txt(s, label, { x, y: 2.75 + r * 0.62, w, h: 0.46, fontSize: 15, align: "center", valign: "middle" });
-      x += w + 0.15;
-    });
-  });
-  txt(s, "Non vedi il tuo settore? Se ricevi molte telefonate, probabilmente funziona anche per te.", { x: M, y: 4.7, w: 6.1, h: 0.55, fontSize: 14, color: K.muted });
+  card(s, "Card chi serve", M, 2.65, 6.1, 1.75, { fill: { color: K.teal, transparency: 92 }, line: { color: K.teal, width: 1.25 } });
   txt(s, [
-    { text: "Una segretaria in ufficio ha orari, ferie e pause pranzo. " },
-    { text: "Questa risponde anche la domenica sera.", options: { italic: true, color: K.teal } },
-  ], { x: M, y: 5.45, w: 6.1, h: 0.9, fontFace: SERIF, fontSize: 21, lineSpacingMultiple: 1.05 });
+    { text: "Se ricevi molte telefonate,", options: { breakLine: true } },
+    { text: "allora fa per te", options: { breakLine: true } },
+    { text: "indipendentemente dal settore.", options: { italic: true, color: K.teal } },
+  ], { x: M + 0.4, y: 2.65, w: 5.4, h: 1.75, fontFace: SERIF, fontSize: 25, valign: "middle", lineSpacingMultiple: 1.05 });
+
+  s.addImage({ path: IC.clock, x: M, y: 4.85, w: 0.42, h: 0.42, altText: "Icona: orologio" });
+  txt(s, "Una segretaria intelligente che lavora per te a qualunque ora, in qualunque lingua e 24\u00A0ore\u00A0su\u00A024.", { x: M + 0.65, y: 4.8, w: 5.45, h: 0.95, fontSize: 18, color: K.soft, lineSpacingMultiple: 1.12 });
 
   const px = 7.35, pw = W - M - px;
   card(s, "Card come si parte", px, 1.0, pw, 5.25);
@@ -205,7 +199,7 @@ Non è un risponditore automatico con i tasti da premere. Si parla con lei come 
     txt(s, String(i + 1), { x: px + 0.43, y, w: 0.5, h: 0.5, fontFace: MONO, fontSize: 15, bold: true, color: K.teal, align: "center", valign: "middle" });
     txt(s, t, { x: px + 1.2, y: y + 0.04, w: pw - 1.6, h: 0.9, fontSize: 15, color: K.soft, lineSpacingMultiple: 1.1 });
   });
-  s.addNotes(`Funziona per chiunque riceva molte telefonate e non può sempre rispondere: chi lavora con le mani, chi riceve clienti, chi ha uno studio.
+  s.addNotes(`Il settore conta poco: conta quante telefonate ricevete. Se il telefono squilla spesso e non potete sempre rispondere, fa per voi. Lavora a qualunque ora, in qualunque lingua.
 E non serve saperne di tecnologia. Ci sentiamo, mi raccontate come lavorate, preparo io la segretaria e colleghiamo il vostro numero. Voi continuate a lavorare come prima.`);
 }
 
