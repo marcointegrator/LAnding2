@@ -11,6 +11,7 @@ Landing page, locandina WhatsApp, volantino PDF e anteprima link per il programm
 | `og.html` → `og-image.png` | Anteprima 1200×630 che compare quando incolli il link. |
 | `volantino.html` → `Sempre-in-Linea-pilota.pdf` | Volantino A4 di una pagina da mandare su WhatsApp: si legge in circa 30 secondi. Il pulsante e il numero sono cliccabili e aprono la chiamata. |
 | `render.mjs` | Rigenera immagini e PDF e tiene allineati i valori. |
+| `presentazione.mjs` → `Sempre-in-Linea-presentazione.pptx` | Presentazione PowerPoint di 4 slide per i potenziali clienti, con le note per chi parla sotto ogni slide. Si rigenera con `npm run deck`. |
 | `shared.js`, `config.js` | Usati solo da locandina, volantino e anteprima. `config.js` è generato: non modificarlo. |
 | `riferimenti/` | Screenshot di riferimento per lo stile. |
 

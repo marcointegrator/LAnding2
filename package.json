@@ -3,9 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "render": "node render.mjs"
+    "render": "node render.mjs",
+    "deck": "node presentazione.mjs"
   },
   "devDependencies": {
-    "playwright": "latest"
+    "playwright": "latest",
+    "pptxgenjs": "^4.0.1"
   }
 }
