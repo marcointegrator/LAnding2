@@ -118,7 +118,7 @@ const teal = (text) => ({ text, options: { italic: true, color: K.teal } });
 
   txt(s, "UNA GIORNATA QUALUNQUE", { x: 1.5, y: 3.85, w: W - 3, h: 0.3, fontFace: MONO, fontSize: 12, bold: true, color: K.teal, charSpacing: 2, align: "center" });
   s.addShape(pres.shapes.LINE, { objectName: "Linea del tempo", x: 1.9, y: 4.5, w: W - 3.8, h: 0, line: { color: K.border, width: 1.5 } });
-  const moments = [["08:40", "Sei sotto un lavandino"], ["11:15", "Sei con un cliente"], ["13:30", "Sei a pranzo"], ["20:10", "Hai già chiuso"]];
+  const moments = [["08:40", "Sei in riunione"], ["11:15", "Sei con un cliente"], ["13:30", "Sei a pranzo"], ["20:10", "Hai già chiuso"]];
   const colW = 2.7, x0 = (W - colW * 4) / 2;
   moments.forEach(([time, what], i) => {
     const cx = x0 + colW * i + colW / 2;

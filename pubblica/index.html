@@ -374,14 +374,18 @@ section.alt { background: var(--bg-2); }
 .is-closed .pilot h2 { color: var(--soft); }
 .is-closed [data-open-only] { display: none !important; }
 
-/* per chi è */
-.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
-.chip {
-  padding: 10px 14px; border-radius: 999px;
-  border: 1px solid var(--border); background: var(--surface);
-  font-size: 15.5px; font-weight: 500; line-height: 1.2; color: var(--text);
+/* a chi serve */
+.callout {
+  margin-top: 28px; padding: 22px 20px;
+  border: 1px solid var(--teal); border-radius: var(--radius);
+  background: rgba(44, 207, 174, 0.06);
+  font: 400 clamp(25px, 7vw, 32px)/1.15 var(--serif); color: var(--text);
+  text-wrap: balance;
 }
-.note { margin-top: 22px; color: var(--soft); font-size: 16px; }
+.callout em { color: var(--teal); }
+@media (min-width: 480px) { .callout span, .callout em { display: block; } }
+.always { display: grid; grid-template-columns: 26px 1fr; gap: 14px; align-items: start; margin-top: 22px; color: var(--soft); font-size: 17px; }
+.always svg { width: 26px; height: 26px; color: var(--teal); margin-top: 1px; }
 
 /* chi c'è dietro */
 .who { display: grid; grid-template-columns: 76px 1fr; gap: 18px; align-items: start; margin-top: 26px; }
@@ -546,7 +550,7 @@ footer {
     <div class="wrap reveal">
       <p class="eyebrow">- Il problema -</p>
       <h2>Il telefono squilla sempre nel momento <em>sbagliato</em></h2>
-      <p class="sec-text lead">Sei sotto un lavandino, in riunione, con un paziente. Rispondi più tardi, ma spesso chi ha chiamato non ha lasciato un messaggio: ha cercato il numero successivo su Google.</p>
+      <p class="sec-text lead">Sei in riunione, con un cliente, con un paziente. Rispondi più tardi, ma spesso chi ha chiamato non ha lasciato un messaggio: ha cercato il numero successivo su Google.</p>
     </div>
   </section>
 
@@ -631,16 +635,10 @@ footer {
 
   <section class="alt">
     <div class="wrap reveal">
-      <p class="eyebrow">- Per chi è -</p>
-      <h2>Fa per te se il telefono squilla <em>tanto</em></h2>
-      <ul class="chips">
-        <li class="chip">Studi medici e dentistici</li>
-        <li class="chip">Idraulici, elettricisti, fabbri</li>
-        <li class="chip">Ristoranti</li>
-        <li class="chip">Centri estetici e parrucchieri</li>
-        <li class="chip">Studi professionali</li>
-      </ul>
-      <p class="note">Non vedi il tuo settore? Chiama e chiedi: se ricevi molte telefonate, probabilmente funziona anche per te.</p>
+      <p class="eyebrow">- A chi serve -</p>
+      <h2>Per chi non può perdere una <em>chiamata</em></h2>
+      <p class="callout"><span>Se ricevi molte telefonate,</span> <span>allora fa per te</span> <em>indipendentemente dal settore.</em></p>
+      <p class="always"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Una segretaria intelligente che lavora per te a qualunque ora, in qualunque lingua e 24&nbsp;ore&nbsp;su&nbsp;24.</span></p>
     </div>
   </section>
 
