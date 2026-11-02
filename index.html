@@ -256,7 +256,7 @@ h2 { font-size: clamp(31px, 8.6vw, 42px); line-height: 1.06; }
 .call-ic { display: grid; place-items: center; width: 26px; height: 26px; flex: none; }
 .call-ic svg { width: 24px; height: 24px; }
 .call-tx { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; min-width: 0; }
-.call-main { font: 600 17.5px/1.15 var(--sans); letter-spacing: -0.005em; }
+.call-main { font: 600 17.5px/1.15 var(--sans); letter-spacing: -0.005em; text-wrap: balance; }
 .call-num { font: 500 13px/1 var(--mono); color: #0A3D33; font-variant-numeric: tabular-nums; }
 .hero .call { margin-top: 14px; }
 .micro { margin: 12px auto 0; max-width: 30em; text-align: center; font-size: 14px; line-height: 1.5; color: var(--muted); text-wrap: balance; }
@@ -361,7 +361,7 @@ section.alt { background: var(--bg-2); }
 .checks li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; font-weight: 500; line-height: 1.4; }
 .checks svg { width: 22px; height: 22px; color: var(--teal); margin-top: -1px; }
 .pilot .spots { justify-content: flex-start; margin-top: 22px; }
-.deadline { margin-top: 10px; font: 500 13.5px/1.3 var(--mono); color: var(--soft); }
+.deadline { margin-top: 10px; font: 500 13.5px/1.3 var(--mono); color: var(--soft); text-wrap: balance; }
 .pilot .call { margin-top: 18px; }
 .pilot .call-main { font-size: 16.5px; }
 /* modalità chiuso */
@@ -663,7 +663,7 @@ footer {
         <span class="call-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span>
         <span class="call-tx"><span class="call-main">Chiama ora</span><span class="call-num" data-phone></span></span>
       </a>
-      <p class="final-line" data-open-only>Il pilota chiude <span data-deadline-day>venerdì 20 novembre</span>. <span data-final-spots></span></p>
+      <p class="final-line" data-open-only>Il pilota chiude <span data-deadline-day>venerdì 20 novembre</span>.<br><span data-final-spots></span></p>
     </div>
   </section>
 </main>
@@ -744,8 +744,8 @@ const CONFIG = {
   /* ---------- posti ---------- */
   function spotsSentence() {
     return left === 1
-      ? "Resta <b>1</b> posto su " + total
-      : "Restano <b>" + left + "</b> posti su " + total;
+      ? "Rimane solo <b>1</b> posto"
+      : "Rimangono solo <b>" + left + "</b> posti";
   }
   $$("[data-spots-text]").forEach(function (el) { el.innerHTML = spotsSentence(); });
   $$("[data-dots]").forEach(function (el) {
@@ -754,11 +754,11 @@ const CONFIG = {
     el.innerHTML = html;
   });
   $$("[data-final-spots]").forEach(function (el) {
-    el.innerHTML = left === 1 ? "Resta <b>1</b> posto." : "Restano <b>" + left + "</b> posti.";
+    el.innerHTML = left === 1 ? "Rimane solo <b>1</b> posto." : "Rimangono solo <b>" + left + "</b> posti.";
   });
   $("#tb-spots").innerHTML = "<b>" + left + "</b> " + (left === 1 ? "posto" : "posti");
   $("#topbar").setAttribute("aria-label",
-    "Programma pilota. " + deadlineText + ". " + (left === 1 ? "Resta 1 posto" : "Restano " + left + " posti") + ". Vai ai dettagli");
+    "Programma pilota. " + deadlineText + ". " + (left === 1 ? "Rimane solo 1 posto" : "Rimangono solo " + left + " posti") + ". Vai ai dettagli");
 
   /* ---------- countdown ---------- */
   var groups = $$("[data-countdown]").map(function (cd) {

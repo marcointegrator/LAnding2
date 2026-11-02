@@ -17,7 +17,7 @@
     el.innerHTML = html;
   });
   document.querySelectorAll("[data-left-text]").forEach(function (el) {
-    el.innerHTML = left === 1 ? "Resta <b>1</b> posto" : "Restano <b>" + left + "</b> posti";
+    el.innerHTML = left === 1 ? "Rimane solo <b>1</b> posto" : "Rimangono solo <b>" + left + "</b> posti";
   });
   fill("[data-day]", part({ day: "numeric" }));
   fill("[data-month]", part({ month: "short" }).replace(".", "").toUpperCase());

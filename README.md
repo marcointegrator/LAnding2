@@ -52,7 +52,7 @@ Finché `PHOTO` è vuota si vedono le iniziali "MP".
 
 ### Quando entra un'azienda
 
-Abbassa `SPOTS_LEFT`. A 1 la pagina scrive "Resta 1 posto"; a 0 passa in modalità "chiuso" con "Posti esauriti. Grazie a chi è entrato.". Se vuoi che anche la locandina dica il numero aggiornato, rilancia `npm run render` (la locandina mostra i posti totali).
+Abbassa `SPOTS_LEFT`. La pagina scrive "Rimangono solo N posti" e a 1 "Rimane solo 1 posto"; a 0 passa in modalità "chiuso" con "Posti esauriti. Grazie a chi è entrato.". Se vuoi che anche la locandina dica il numero aggiornato, rilancia `npm run render` (la locandina mostra i posti totali).
 
 ## Cosa pubblicare (Netlify)
 
