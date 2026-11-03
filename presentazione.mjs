@@ -187,8 +187,8 @@ Non è un risponditore automatico con i tasti da premere. Si parla con lei come 
   txt(s, "COME SI PARTE", { x: px + 0.4, y: 1.35, w: pw - 0.8, h: 0.3, fontFace: MONO, fontSize: 12, bold: true, color: K.teal, charSpacing: 2 });
   txt(s, "Tu non devi fare niente di tecnico", { x: px + 0.4, y: 1.72, w: pw - 0.8, h: 0.45, fontSize: 21, bold: true });
   const steps = [
-    "Una breve chiamata: mi racconti come lavori e cosa ti chiedono di solito i clienti.",
-    "Preparo la tua segretaria: come si presenta, cosa risponde, i tuoi orari, il tuo calendario.",
+    "Una breve chiamata: ci racconti come lavori e cosa ti chiedono di solito i clienti.",
+    "Prepariamo la tua segretaria: come si presenta, cosa risponde, i tuoi orari, il tuo calendario.",
     "Colleghiamo il tuo numero. Da quel momento, quando tu non puoi, risponde lei.",
   ];
   const sy = 2.75, step = 1.12;
@@ -200,7 +200,7 @@ Non è un risponditore automatico con i tasti da premere. Si parla con lei come 
     txt(s, t, { x: px + 1.2, y: y + 0.04, w: pw - 1.6, h: 0.9, fontSize: 15, color: K.soft, lineSpacingMultiple: 1.1 });
   });
   s.addNotes(`Il settore conta poco: conta quante telefonate ricevete. Se il telefono squilla spesso e non potete sempre rispondere, fa per voi. Lavora a qualunque ora, in qualunque lingua.
-E non serve saperne di tecnologia. Ci sentiamo, mi raccontate come lavorate, preparo io la segretaria e colleghiamo il vostro numero. Voi continuate a lavorare come prima.`);
+E non serve saperne di tecnologia. Ci sentiamo, ci raccontate come lavorate, prepariamo noi la segretaria e colleghiamo il vostro numero. Voi continuate a lavorare come prima.`);
 }
 
 /* 4. L'offerta ------------------------------------------------------- */
@@ -210,7 +210,7 @@ E non serve saperne di tecnologia. Ci sentiamo, mi raccontate come lavorate, pre
   s.addText([{ text: "Provala sul tuo numero. " }, teal("Gratis"), { text: " per 2 settimane." }], { placeholder: "title", lang: "it-IT" });
   const checks = [
     "2 settimane gratis, con i tuoi clienti veri",
-    "Configurazione fatta da me, inclusa",
+    "Configurazione fatta da noi, inclusa",
     "Primo mese soddisfatto o rimborsato",
     "Nessun vincolo: finite le 2 settimane, decidi tu",
   ];
@@ -219,7 +219,7 @@ E non serve saperne di tecnologia. Ci sentiamo, mi raccontate come lavorate, pre
     s.addImage({ path: IC.check, x: M, y: y + 0.02, w: 0.3, h: 0.3, altText: "Spunta" });
     txt(s, t, { x: M + 0.5, y, w: 5.8, h: 0.36, fontSize: 18 });
   });
-  txt(s, "Il rischio lo prendo io: se dopo il primo mese non ti convince, ti restituisco quello che hai pagato.", { x: M, y: 5.2, w: 6.1, h: 0.7, fontSize: 15, color: K.soft, lineSpacingMultiple: 1.1 });
+  txt(s, "Il rischio lo prendiamo noi: se dopo il primo mese non ti convince, ti restituiamo quello che hai pagato.", { x: M, y: 5.2, w: 6.1, h: 0.7, fontSize: 15, color: K.soft, lineSpacingMultiple: 1.1 });
 
   const px = 7.35, pw = W - M - px, cx = px + pw / 2;
   card(s, "Card chiamata", px, 1.0, pw, 5.25, { line: { color: K.teal, width: 1.25 }, shadow: { type: "outer", color: K.teal, blur: 24, offset: 0, angle: 90, opacity: 0.35 } });
@@ -249,8 +249,8 @@ E non serve saperne di tecnologia. Ci sentiamo, mi raccontate come lavorate, pre
   s.addShape(pres.shapes.RECTANGLE, { objectName: "Link chiamata", x: px + 0.4, y: 3.6, w: pw - 0.8, h: 1.67, fill: { color: K.surface, transparency: 100 }, line: { type: "none" }, hyperlink: { url: TEL, tooltip: "Chiama la segretaria" } });
   txt(s, "Non crederci sulla parola: chiamala e mettila alla prova.", { x: px + 0.3, y: 5.35, w: pw - 0.6, h: 0.3, fontSize: 14, color: K.soft, align: "center" });
   txt(s, `Marco Pontone · Roma${CONFIG.PIVA ? ` · P.IVA ${CONFIG.PIVA}` : ""}`, { x: px + 0.3, y: 5.78, w: pw - 0.6, h: 0.25, fontSize: 11, color: K.muted, align: "center" });
-  s.addNotes(`Il pilota è per ${CONFIG.SPOTS_TOTAL} aziende e chiude ${DAY_LONG} alle ${TIME}. Due settimane gratis sul vostro numero, con i vostri clienti veri. La configurazione la faccio io.
-Se dopo decidete di continuare, il primo mese è soddisfatto o rimborsato. Il rischio è mio, non vostro.
+  s.addNotes(`Il pilota è per ${CONFIG.SPOTS_TOTAL} aziende e chiude ${DAY_LONG} alle ${TIME}. Due settimane gratis sul vostro numero, con i vostri clienti veri. La configurazione la facciamo noi.
+Se dopo decidete di continuare, il primo mese è soddisfatto o rimborsato. Il rischio è nostro, non vostro.
 Chiudete facendo chiamare il numero in sala, in vivavoce: la telefonata è la dimostrazione migliore.`);
 }
 
