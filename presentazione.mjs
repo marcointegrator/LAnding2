@@ -2,8 +2,9 @@
 // Numero, scadenza, posti e P.IVA arrivano da CONFIG in index.html, come per locandina e volantino.
 // Sfondi, onda e icone vengono disegnati in HTML e fotografati con Playwright, poi inseriti come immagini;
 // tutti i testi restano testo vero, modificabile in PowerPoint.
-import { readFile, mkdtemp, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { readFile, writeFile, mkdtemp, rm, mkdir, copyFile, access } from "node:fs/promises";
+import { tmpdir, homedir } from "node:os";
+import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { chromium } from "playwright";
@@ -222,13 +223,14 @@ E non serve saperne di tecnologia. Ci sentiamo, ci raccontate come lavorate, pre
   txt(s, "Il rischio lo prendiamo noi: se dopo il primo mese non ti convince, ti restituiamo quello che hai pagato.", { x: M, y: 5.2, w: 6.1, h: 0.7, fontSize: 15, color: K.soft, lineSpacingMultiple: 1.1 });
 
   const px = 7.35, pw = W - M - px, cx = px + pw / 2;
-  card(s, "Card chiamata", px, 1.0, pw, 5.25, { line: { color: K.teal, width: 1.25 }, shadow: { type: "outer", color: K.teal, blur: 24, offset: 0, angle: 90, opacity: 0.35 } });
+  // Niente ombre: i visori dei telefoni (anteprima di WhatsApp su iPhone) le gestiscono male. Il bagliore è già nello sfondo.
+  card(s, "Card chiamata", px, 1.0, pw, 5.25, { line: { color: K.teal, width: 1.5 } });
   txt(s, "IL PILOTA CHIUDE IL", { x: px, y: 1.32, w: pw, h: 0.3, fontFace: MONO, fontSize: 13, bold: true, color: K.alarm, charSpacing: 2, align: "center" });
   const tiles = [[DAY, 1.1], [MONTH, 1.45], [TIME, 1.95]];
   const tw = tiles.reduce((a, [, w]) => a + w, 0) + 0.12 * (tiles.length - 1);
   let tx = cx - tw / 2;
   tiles.forEach(([v, w]) => {
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { objectName: `Tessera ${v}`, x: tx, y: 1.75, w, h: 0.95, rectRadius: 0.12, fill: { color: "000000" }, line: { color: K.alarm, width: 1.5 }, shadow: { type: "outer", color: K.alarm, blur: 14, offset: 0, angle: 90, opacity: 0.35 } });
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { objectName: `Tessera ${v}`, x: tx, y: 1.75, w, h: 0.95, rectRadius: 0.12, fill: { color: "000000" }, line: { color: K.alarm, width: 1.75 } });
     txt(s, v, { x: tx, y: 1.75, w, h: 0.95, fontFace: MONO, fontSize: 34, bold: true, color: K.alarm, align: "center", valign: "middle" });
     tx += w + 0.12;
   });
@@ -257,3 +259,53 @@ Chiudete facendo chiamare il numero in sala, in vivavoce: la telefonata è la di
 await pres.writeFile({ fileName: OUT });
 await rm(tmp, { recursive: true, force: true });
 console.log(`${OUT.split("/").pop()} salvata`);
+
+// Versione PDF per WhatsApp: la esporta PowerPoint stesso, così è identica a quello che vedi presentando.
+// Serve PowerPoint per Mac; senza, viene saltata e resta solo il .pptx.
+const PDF = OUT.replace(/\.pptx$/, ".pdf");
+try {
+  if (process.platform !== "darwin") throw new Error("non sei su un Mac");
+  await access("/Applications/Microsoft PowerPoint.app");
+  // PowerPoint può scrivere solo dentro la sua cartella di lavoro
+  const box = join(homedir(), "Library/Containers/com.microsoft.Powerpoint/Data/Documents/sempre-in-linea-export");
+  await mkdir(box, { recursive: true });
+  await copyFile(OUT, join(box, "deck.pptx"));
+  await rm(join(box, "deck.pdf"), { force: true });
+  execFileSync("open", ["-g", "-a", "Microsoft PowerPoint"]);
+  const script = `tell application "Microsoft PowerPoint"
+    open (POSIX file "${box}/deck.pptx")
+    delay 3
+    save active presentation in (POSIX file "${box}/deck.pdf") as save as PDF
+    delay 2
+    close active presentation saving no
+  end tell`;
+  for (let attempt = 1; ; attempt++) {
+    try { execFileSync("osascript", ["-e", script], { stdio: "pipe" }); break; }
+    catch (e) { if (attempt === 3) throw e; execFileSync("sleep", ["5"]); } // PowerPoint può metterci un po' ad avviarsi
+  }
+  await copyFile(join(box, "deck.pdf"), PDF);
+  await rm(box, { recursive: true, force: true });
+  await addCallLink(PDF);
+  console.log(`${PDF.split("/").pop()} salvata`);
+} catch (e) {
+  console.warn(`PDF della presentazione non creato (${e.message.split("\n")[0]}). Esportalo da PowerPoint: File > Esporta > PDF.`);
+}
+
+// PowerPoint non porta nel PDF il link dell'area "Chiamala adesso": lo aggiungiamo sopra pulsante e numero
+// dell'ultima pagina, così dal telefono basta un tocco per chiamare.
+async function addCallLink(file) {
+  const { PDFDocument, PDFName, PDFString } = await import("pdf-lib");
+  const doc = await PDFDocument.load(await readFile(file));
+  const page = doc.getPages().at(-1);
+  const { width, height } = page.getSize();
+  const k = width / W; // punti PDF per pollice della slide
+  const x = 7.35 + 0.4, w = W - M - 7.35 - 0.8, top = 3.6, h = 1.67; // stessa area del link nella slide 4
+  const link = doc.context.register(doc.context.obj({
+    Type: "Annot", Subtype: "Link", Border: [0, 0, 0],
+    Rect: [x * k, height - (top + h) * k, (x + w) * k, height - top * k],
+    A: { Type: "Action", S: "URI", URI: PDFString.of(TEL) },
+  }));
+  const annots = page.node.lookup(PDFName.of("Annots"));
+  if (annots) annots.push(link); else page.node.set(PDFName.of("Annots"), doc.context.obj([link]));
+  await writeFile(file, await doc.save());
+}
