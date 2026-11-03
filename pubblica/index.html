@@ -440,6 +440,23 @@ footer {
 .dock.show { transform: none; }
 .dock .call { max-width: var(--col); margin: 0 auto; min-height: 56px; }
 
+.nowrap { white-space: nowrap; }
+
+/* ---------- telefoni stretti (iPhone SE e simili) ---------- */
+@media (max-width: 374px) {
+  .topbar { gap: 6px; font-size: 10.5px; }
+  .tb-time { font-size: 12px; }
+  .tb-live { gap: 6px; }
+}
+@media (max-width: 340px) {
+  .hero h1 { margin-top: 14px; font-size: 33px; }
+  .hero .lead { margin-top: 10px; font-size: 15px; line-height: 1.42; }
+  .cd { margin-top: 16px; }
+  .cd-label { margin-bottom: 8px; }
+  .val, .sep { height: 54px; }
+  .spots { margin-top: 10px; }
+}
+
 /* ---------- desktop ---------- */
 @media (min-width: 720px) {
   section { padding: 104px 0; }
@@ -730,7 +747,12 @@ const CONFIG = {
   labelCalls();
 
   /* ---------- P.IVA e foto ---------- */
-  if (CONFIG.PIVA) $("#piva").textContent = " · P.IVA " + CONFIG.PIVA;
+  if (CONFIG.PIVA) {
+    var piva = document.createElement("span");
+    piva.className = "nowrap";
+    piva.textContent = "P.IVA " + CONFIG.PIVA;
+    $("#piva").append(" · ", piva);
+  }
   if (CONFIG.PHOTO) {
     var av = $("#avatar");
     av.innerHTML = "";
