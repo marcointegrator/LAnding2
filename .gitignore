@@ -1,3 +1,6 @@
-node_modules/
-.DS_Store
-.claude/
+# Online va solo il sito. Sorgenti, script e messaggi restano in locale.
+*
+!.gitignore
+!.nojekyll
+!index.html
+!og-image.png
