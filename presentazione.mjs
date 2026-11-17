@@ -1,4 +1,4 @@
-// Genera Sempre-in-Linea-presentazione.pptx (4 slide, 16:9).
+// Genera Ponteo-AI-presentazione.pptx (4 slide, 16:9).
 // Numero, scadenza, posti e P.IVA arrivano da CONFIG in index.html, come per locandina e volantino.
 // Sfondi, onda e icone vengono disegnati in HTML e fotografati con Playwright, poi inseriti come immagini;
 // tutti i testi restano testo vero, modificabile in PowerPoint.
@@ -11,7 +11,7 @@ import { chromium } from "playwright";
 import pptxgen from "pptxgenjs";
 
 const dir = dirname(fileURLToPath(import.meta.url));
-const OUT = join(dir, "Sempre-in-Linea-presentazione.pptx");
+const OUT = join(dir, "Ponteo-AI-presentazione.pptx");
 
 const html = await readFile(join(dir, "index.html"), "utf8");
 const CONFIG = new Function(`return ${html.match(/const CONFIG = (\{[\s\S]*?\});/)[1]}`)();
@@ -81,13 +81,13 @@ await browser.close();
 /* ------------------------------------------------------------------ presentazione */
 const pres = new pptxgen();
 pres.layout = "LAYOUT_WIDE"; // 13.333 x 7.5 pollici
-pres.title = "Sempre in Linea";
+pres.title = "Ponteo AI";
 pres.author = "Marco Pontone";
 pres.theme = { headFontFace: SERIF, bodyFontFace: SANS };
 const W = 13.333, M = 0.6;
 
 const footer = [
-  { text: { text: "Sempre in Linea", options: { x: M, y: 6.95, w: 3, h: 0.3, fontFace: MONO, fontSize: 10, color: K.muted, margin: 0 } } },
+  { text: { text: "Ponteo AI", options: { x: M, y: 6.95, w: 3, h: 0.3, fontFace: MONO, fontSize: 10, color: K.muted, margin: 0 } } },
 ];
 const titlePh = (x, y, w, h, align, size) => ({
   placeholder: { options: { name: "title", type: "title", x, y, w, h, align, valign: "top", fontFace: SERIF, fontSize: size, color: K.text, margin: 0, lineSpacingMultiple: 0.95 }, text: "" },
@@ -112,8 +112,8 @@ const teal = (text) => ({ text, options: { italic: true, color: K.teal } });
 /* 1. Il problema ----------------------------------------------------- */
 {
   const s = pres.addSlide({ masterName: "Apertura" });
-  s.addShape(pres.shapes.OVAL, { objectName: "Puntino logo", x: 5.53, y: 0.56, w: 0.15, h: 0.15, fill: { color: K.teal }, line: { type: "none" } });
-  txt(s, "Sempre in Linea", { x: 5.78, y: 0.44, w: 3, h: 0.4, fontFace: SERIF, fontSize: 20 });
+  s.addShape(pres.shapes.OVAL, { objectName: "Puntino logo", x: 5.92, y: 0.56, w: 0.15, h: 0.15, fill: { color: K.teal }, line: { type: "none" } });
+  txt(s, "Ponteo AI", { x: 6.17, y: 0.44, w: 3, h: 0.4, fontFace: SERIF, fontSize: 20 });
   s.addText([{ text: "Quante chiamate hai " }, { text: "perso", options: { italic: true, color: K.teal, breakLine: true } }, { text: "questa settimana?" }], { placeholder: "title", lang: "it-IT" });
   txt(s, "Non per pigrizia. Perché in quel momento avevi le mani occupate.", { x: 1.5, y: 3.0, w: W - 3, h: 0.45, fontSize: 18, color: K.soft, align: "center" });
 
@@ -267,7 +267,7 @@ try {
   if (process.platform !== "darwin") throw new Error("non sei su un Mac");
   await access("/Applications/Microsoft PowerPoint.app");
   // PowerPoint può scrivere solo dentro la sua cartella di lavoro
-  const box = join(homedir(), "Library/Containers/com.microsoft.Powerpoint/Data/Documents/sempre-in-linea-export");
+  const box = join(homedir(), "Library/Containers/com.microsoft.Powerpoint/Data/Documents/ponteo-ai-export");
   await mkdir(box, { recursive: true });
   await copyFile(OUT, join(box, "deck.pptx"));
   await rm(join(box, "deck.pdf"), { force: true });

@@ -1,4 +1,4 @@
-# Sempre in Linea
+# Ponteo AI
 
 Landing page, locandina WhatsApp, volantino PDF e anteprima link per il programma pilota.
 
@@ -9,9 +9,9 @@ Landing page, locandina WhatsApp, volantino PDF e anteprima link per il programm
 | `index.html` | La pagina. File unico (HTML, CSS e JS dentro). È l'unica fonte dei valori: oggetto `CONFIG` in cima allo script. |
 | `locandina.html` → `locandina.png` | Immagine 1080×1350 da inoltrare su WhatsApp. |
 | `og.html` → `og-image.png` | Anteprima 1200×630 che compare quando incolli il link. |
-| `volantino.html` → `Sempre-in-Linea-pilota.pdf` | Volantino A4 di una pagina da mandare su WhatsApp: si legge in circa 30 secondi. Il pulsante e il numero sono cliccabili e aprono la chiamata. |
+| `volantino.html` → `Ponteo-AI-pilota.pdf` | Volantino A4 di una pagina da mandare su WhatsApp: si legge in circa 30 secondi. Il pulsante e il numero sono cliccabili e aprono la chiamata. |
 | `render.mjs` | Rigenera immagini e PDF e tiene allineati i valori. |
-| `presentazione.mjs` → `Sempre-in-Linea-presentazione.pptx` e `.pdf` | Presentazione di 4 slide per i potenziali clienti, con le note per chi parla sotto ogni slide. Il `.pptx` serve per presentare dal computer; il `.pdf` è da mandare su WhatsApp, perché l'anteprima dei telefoni rende male i PowerPoint (sull'iPhone mancavano pezzi di slide). Nel PDF il pulsante e il numero dell'ultima pagina sono cliccabili. `npm run deck` rigenera entrambi; per il PDF serve PowerPoint per Mac. |
+| `presentazione.mjs` → `Ponteo-AI-presentazione.pptx` e `.pdf` | Presentazione di 4 slide per i potenziali clienti, con le note per chi parla sotto ogni slide. Il `.pptx` serve per presentare dal computer; il `.pdf` è da mandare su WhatsApp, perché l'anteprima dei telefoni rende male i PowerPoint (sull'iPhone mancavano pezzi di slide). Nel PDF il pulsante e il numero dell'ultima pagina sono cliccabili. `npm run deck` rigenera entrambi; per il PDF serve PowerPoint per Mac. |
 | `shared.js`, `config.js` | Usati solo da locandina, volantino e anteprima. `config.js` è generato: non modificarlo. |
 | `riferimenti/` | Screenshot di riferimento per lo stile. |
 
@@ -42,7 +42,7 @@ npm install
 npm run render
 ```
 
-`render.mjs` legge `CONFIG` da `index.html`, scrive `config.js`, aggiorna `og:image` e `og:url` nell'`<head>` con `SITE_URL` e salva `locandina.png`, `og-image.png` e `Sempre-in-Linea-pilota.pdf`. Serve la connessione internet (i font arrivano da Google Fonts).
+`render.mjs` legge `CONFIG` da `index.html`, scrive `config.js`, aggiorna `og:image` e `og:url` nell'`<head>` con `SITE_URL` e salva `locandina.png`, `og-image.png` e `Ponteo-AI-pilota.pdf`. Serve la connessione internet (i font arrivano da Google Fonts).
 
 ### La foto
 
@@ -60,7 +60,7 @@ Abbassa `SPOTS_LEFT`. La pagina scrive "Rimangono solo N posti" e a 1 "Rimane so
 `npm run render` prepara la cartella `pubblica/` con i soli file del sito (`index.html`, `og-image.png` e la foto se impostata).
 
 1. Vai su app.netlify.com/drop e trascina la cartella `pubblica/`.
-2. Netlify ti dà un indirizzo tipo `nome-a-caso.netlify.app`: in Site configuration > Change site name puoi cambiarlo, es. `sempreinlinea.netlify.app`.
+2. Netlify ti dà un indirizzo tipo `nome-a-caso.netlify.app`: in Site configuration > Change site name puoi cambiarlo, es. `ponteoai.netlify.app`.
 3. Metti quell'indirizzo in `SITE_URL`, rilancia `npm run render` e trascina di nuovo `pubblica/` nella pagina Deploys dello stesso sito.
 
 WhatsApp tiene in cache l'anteprima del link: fai il passo 3 prima di condividere il link la prima volta.

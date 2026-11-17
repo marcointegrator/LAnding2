@@ -32,7 +32,7 @@ if (updated !== html) await writeFile(indexPath, updated);
 const jobs = [
   { page: "locandina.html", out: "locandina.png", width: 1080, height: 1350 },
   { page: "og.html", out: "og-image.png", width: 1200, height: 630 },
-  { page: "volantino.html", out: "Sempre-in-Linea-pilota.pdf", width: 794, height: 1123, pdf: true },
+  { page: "volantino.html", out: "Ponteo-AI-pilota.pdf", width: 794, height: 1123, pdf: true },
 ];
 
 const browser = await chromium.launch();
