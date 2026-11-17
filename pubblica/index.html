@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#04090A">
 <title>Ponteo AI · La segretaria AI che non stacca mai</title>
-<meta name="description" content="Una segretaria AI che risponde al telefono della tua azienda 24 ore su 24. Programma pilota: 2 settimane gratis, solo 3 posti fino al 20 novembre.">
+<meta name="description" content="Una segretaria AI che risponde al telefono della tua azienda 24 ore su 24. Programma pilota: 2 settimane gratis, solo 3 posti fino al 24 novembre.">
 
 <!-- Anteprima link (WhatsApp, Telegram, social). og:image e og:url vengono aggiornati da render.mjs con CONFIG.SITE_URL -->
 <meta property="og:type" content="website">
@@ -17,7 +17,7 @@
 <meta property="og:image" content="https://example.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Ponteo AI: quante chiamate hai perso questa settimana? Pilota gratuito, chiude il 20 novembre.">
+<meta property="og:image:alt" content="Ponteo AI: quante chiamate hai perso questa settimana? Pilota gratuito, chiude il 24 novembre.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Quante chiamate hai perso questa settimana?">
 <meta name="twitter:description" content="Chiama e parla con la segretaria AI. Pilota gratuito, solo 3 posti.">
@@ -527,7 +527,7 @@ footer {
 
     <div class="cd" data-countdown data-open-only aria-live="off">
       <p class="cd-label" data-cd-label>Il programma pilota chiude tra</p>
-      <p class="sr-only" data-deadline-text>Chiude il 20 novembre alle 23:59</p>
+      <p class="sr-only" data-deadline-text>Chiude il 24 novembre alle 23:59</p>
       <div class="tiles" aria-hidden="true">
         <div class="tile" data-unit="d"><div class="val"></div><span class="unit">giorni</span></div>
         <span class="sep">:</span>
@@ -616,7 +616,7 @@ footer {
       <div class="pilot reveal">
         <div class="cd" data-countdown data-open-only aria-live="off">
           <p class="cd-label" data-cd-label>Il programma pilota chiude tra</p>
-          <p class="sr-only" data-deadline-text>Chiude il 20 novembre alle 23:59</p>
+          <p class="sr-only" data-deadline-text>Chiude il 24 novembre alle 23:59</p>
           <div class="tiles" aria-hidden="true">
             <div class="tile" data-unit="d"><div class="val"></div><span class="unit">giorni</span></div>
             <span class="sep">:</span>
@@ -640,7 +640,7 @@ footer {
         </ul>
 
         <p class="spots" data-open-only><span class="dots" data-dots aria-hidden="true"></span><span data-spots-text></span></p>
-        <p class="deadline" data-open-only>Candidature entro <span data-deadline-day>venerdì 20 novembre</span></p>
+        <p class="deadline" data-open-only>Candidature entro <span data-deadline-day>martedì 24 novembre</span></p>
 
         <a class="call" id="pilot-call" data-tel href="#">
           <span class="call-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span>
@@ -678,7 +678,7 @@ footer {
         <span class="call-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span>
         <span class="call-tx"><span class="call-main">Chiama ora</span><span class="call-num" data-phone></span></span>
       </a>
-      <p class="final-line" data-open-only>Il pilota chiude <span data-deadline-day>venerdì 20 novembre</span>.<br><span data-final-spots></span></p>
+      <p class="final-line" data-open-only>Il pilota chiude <span data-deadline-day>martedì 24 novembre</span>.<br><span data-final-spots></span></p>
     </div>
   </section>
 </main>
@@ -703,7 +703,7 @@ footer {
 const CONFIG = {
   PHONE_TEL: "+390698237052",            // formato per il link tel:
   PHONE_DISPLAY: "06 9823 7052",         // come appare a schermo
-  DEADLINE: "2026-11-20T23:59:59+01:00", // fine pilota, ora di Roma
+  DEADLINE: "2026-11-24T23:59:59+01:00", // fine pilota, ora di Roma
   SPOTS_TOTAL: 3,                        // posti totali del pilota
   SPOTS_LEFT: 3,                         // lo aggiorno a mano quando entra un'azienda
   SITE_URL: "https://example.com",       // serve per og:image assoluta (senza / finale)
@@ -726,8 +726,8 @@ const CONFIG = {
   function fmt(opts) {
     return new Intl.DateTimeFormat("it-IT", Object.assign({ timeZone: "Europe/Rome" }, opts)).format(deadline);
   }
-  var dayLong = fmt({ weekday: "long", day: "numeric", month: "long" });  // venerdì 20 novembre
-  var dayShort = fmt({ day: "numeric", month: "long" });                  // 20 novembre
+  var dayLong = fmt({ weekday: "long", day: "numeric", month: "long" });  // es. martedì 24 novembre
+  var dayShort = fmt({ day: "numeric", month: "long" });                  // es. 24 novembre
   var hourMin = fmt({ hour: "2-digit", minute: "2-digit" });              // 23:59
   var deadlineText = "Chiude il " + dayShort + " alle " + hourMin;
 

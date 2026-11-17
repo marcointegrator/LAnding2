@@ -23,7 +23,16 @@ await writeFile(
 );
 
 const site = String(CONFIG.SITE_URL).replace(/\/+$/, "");
+// Le date scritte nell'HTML (descrizione per Google/WhatsApp e testi di riserva senza JavaScript)
+// seguono sempre CONFIG.DEADLINE.
+const fmt = (o) => new Intl.DateTimeFormat("it-IT", { timeZone: "Europe/Rome", ...o }).format(new Date(CONFIG.DEADLINE));
+const dayShort = fmt({ day: "numeric", month: "long" }), dayLong = fmt({ weekday: "long", day: "numeric", month: "long" });
+const hourMin = fmt({ hour: "2-digit", minute: "2-digit" });
 const updated = html
+  .replace(/(<meta name="description" content="[^"]*fino al )[^".]*/, `$1${dayShort}`)
+  .replace(/(<meta property="og:image:alt" content="[^"]*chiude il )[^".]*/, `$1${dayShort}`)
+  .replace(/(data-deadline-text>Chiude il )[^<]*/g, `$1${dayShort} alle ${hourMin}`)
+  .replace(/(<span data-deadline-day>)[^<]*/g, `$1${dayLong}`)
   .replace(/(<meta property="og:image" content=")[^"]*(")/, `$1${site}/og-image.png$2`)
   .replace(/(<meta name="twitter:image" content=")[^"]*(")/, `$1${site}/og-image.png$2`)
   .replace(/(<meta property="og:url" content=")[^"]*(")/, `$1${site}/$2`);

@@ -2,7 +2,7 @@
 window.CONFIG = {
   "PHONE_TEL": "+390698237052",
   "PHONE_DISPLAY": "06 9823 7052",
-  "DEADLINE": "2026-11-20T23:59:59+01:00",
+  "DEADLINE": "2026-11-24T23:59:59+01:00",
   "SPOTS_TOTAL": 3,
   "SPOTS_LEFT": 3,
   "SITE_URL": "https://example.com",

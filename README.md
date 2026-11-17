@@ -23,7 +23,7 @@ Apri `index.html`, cerca `const CONFIG` e modifica solo lì:
 const CONFIG = {
   PHONE_TEL: "+390600000000",            // formato per il link tel:
   PHONE_DISPLAY: "06 0000 0000",         // come appare a schermo
-  DEADLINE: "2026-11-20T23:59:59+01:00", // fine pilota, ora di Roma
+  DEADLINE: "2026-11-24T23:59:59+01:00", // fine pilota, ora di Roma
   SPOTS_TOTAL: 3,
   SPOTS_LEFT: 3,                         // lo aggiorno a mano quando entra un'azienda
   SITE_URL: "https://example.com",       // dominio vero, senza / finale
