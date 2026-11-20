@@ -79,18 +79,15 @@ h1 em { color: var(--teal); padding-right: 0.06em; }
 .checks span { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
 .checks svg { width: 22px; height: 22px; color: var(--teal); flex: none; }
 
-.deadline { margin-top: 18px; display: flex; justify-content: center; align-items: center; gap: 22px; }
-.dl-label { font: 700 22px/1 var(--mono); color: var(--alarm); }
-.tiles { display: flex; gap: 10px; }
-.tile {
-  height: 70px; padding: 0 16px; display: grid; place-items: center;
-  background: #000; border: 2px solid var(--alarm); border-radius: 12px;
-  font: 700 42px/1 var(--mono); color: var(--alarm);
+.spots {
+  margin: 20px auto 0; width: fit-content; height: 64px; padding: 0 26px;
+  display: flex; align-items: center; gap: 16px;
+  background: #000; border: 2px solid var(--alarm); border-radius: 14px;
+  font: 700 28px/1 var(--mono); color: var(--text); white-space: nowrap;
 }
-.spots { margin-top: 12px; display: flex; justify-content: flex-start; align-items: center; gap: 10px; font: 500 22px/1 var(--sans); color: var(--soft); white-space: nowrap; }
-.spots b { color: var(--alarm); font-weight: 600; }
-.dots-row { display: inline-flex; gap: 6px; }
-.dots-row i { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--muted); }
+.spots b { color: var(--alarm); }
+.dots-row { display: inline-flex; gap: 8px; }
+.dots-row i { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--muted); }
 .dots-row i.free { background: var(--alarm); border-color: var(--alarm); }
 
 .cta { display: block; margin-top: 14px; text-align: center; }
@@ -148,13 +145,7 @@ h1 em { color: var(--teal); padding-right: 0.06em; }
       </div>
     </div>
 
-    <div class="deadline">
-      <div class="dl-text">
-        <p class="dl-label">Il pilota chiude il</p>
-        <div class="spots"><span class="dots-row" data-dots></span><span data-left-text>Rimangono solo <b>3</b> posti</span></div>
-      </div>
-      <div class="tiles"><div class="tile" data-day>20</div><div class="tile" data-month>NOV</div><div class="tile" data-time>23:59</div></div>
-    </div>
+    <div class="spots"><span class="dots-row" data-dots></span><span data-left-text>Rimangono solo <b>3</b> posti</span></div>
 
     <a class="cta" data-tel href="#">
       <div class="btn">

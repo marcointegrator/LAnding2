@@ -1,5 +1,5 @@
 // Genera Ponteo-AI-presentazione.pptx (4 slide, 16:9).
-// Numero, scadenza, posti e P.IVA arrivano da CONFIG in index.html, come per locandina e volantino.
+// Numero, posti e P.IVA arrivano da CONFIG in index.html, come per locandina e volantino.
 // Sfondi, onda e icone vengono disegnati in HTML e fotografati con Playwright, poi inseriti come immagini;
 // tutti i testi restano testo vero, modificabile in PowerPoint.
 import { readFile, writeFile, mkdtemp, rm, mkdir, copyFile, access } from "node:fs/promises";
@@ -17,12 +17,6 @@ const html = await readFile(join(dir, "index.html"), "utf8");
 const CONFIG = new Function(`return ${html.match(/const CONFIG = (\{[\s\S]*?\});/)[1]}`)();
 const TEL = `tel:${CONFIG.PHONE_TEL}`;
 const left = Math.min(CONFIG.SPOTS_TOTAL, Math.max(0, CONFIG.SPOTS_LEFT));
-const deadline = new Date(CONFIG.DEADLINE);
-const part = (o) => new Intl.DateTimeFormat("it-IT", { timeZone: "Europe/Rome", ...o }).format(deadline);
-const DAY = part({ day: "numeric" });
-const MONTH = part({ month: "short" }).replace(".", "").toUpperCase();
-const TIME = part({ hour: "2-digit", minute: "2-digit" });
-const DAY_LONG = part({ weekday: "long", day: "numeric", month: "long" });
 
 // Palette della landing
 const K = {
@@ -225,23 +219,17 @@ E non serve saperne di tecnologia. Ci sentiamo, ci raccontate come lavorate, pre
   const px = 7.35, pw = W - M - px, cx = px + pw / 2;
   // Niente ombre: i visori dei telefoni (anteprima di WhatsApp su iPhone) le gestiscono male. Il bagliore è già nello sfondo.
   card(s, "Card chiamata", px, 1.0, pw, 5.25, { line: { color: K.teal, width: 1.5 } });
-  txt(s, "IL PILOTA CHIUDE IL", { x: px, y: 1.32, w: pw, h: 0.3, fontFace: MONO, fontSize: 13, bold: true, color: K.alarm, charSpacing: 2, align: "center" });
-  const tiles = [[DAY, 1.1], [MONTH, 1.45], [TIME, 1.95]];
-  const tw = tiles.reduce((a, [, w]) => a + w, 0) + 0.12 * (tiles.length - 1);
-  let tx = cx - tw / 2;
-  tiles.forEach(([v, w]) => {
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { objectName: `Tessera ${v}`, x: tx, y: 1.75, w, h: 0.95, rectRadius: 0.12, fill: { color: "000000" }, line: { color: K.alarm, width: 1.75 } });
-    txt(s, v, { x: tx, y: 1.75, w, h: 0.95, fontFace: MONO, fontSize: 34, bold: true, color: K.alarm, align: "center", valign: "middle" });
-    tx += w + 0.12;
-  });
-  const spotsText = left === 1 ? [["Rimane solo ", K.soft], ["1", K.alarm], [" posto", K.soft]] : [["Rimangono solo ", K.soft], [String(left), K.alarm], [" posti", K.soft]];
-  const dotsW = CONFIG.SPOTS_TOTAL * 0.16 + (CONFIG.SPOTS_TOTAL - 1) * 0.08;
-  const spotsW = dotsW + 0.15 + 2.75;
+  txt(s, "POSTI DISPONIBILI", { x: px, y: 1.4, w: pw, h: 0.3, fontFace: MONO, fontSize: 13, bold: true, color: K.alarm, charSpacing: 2, align: "center" });
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { objectName: "Riquadro posti", x: px + 0.4, y: 1.85, w: pw - 0.8, h: 0.95, rectRadius: 0.12, fill: { color: "000000" }, line: { color: K.alarm, width: 1.75 } });
+  const spotsText = left === 1 ? [["Rimane solo ", K.text], ["1", K.alarm], [" posto", K.text]] : [["Rimangono solo ", K.text], [String(left), K.alarm], [" posti", K.text]];
+  const dot = 0.22, dotGap = 0.1, textW = 3.35;
+  const dotsW = CONFIG.SPOTS_TOTAL * dot + (CONFIG.SPOTS_TOTAL - 1) * dotGap;
+  const sx = cx - (dotsW + 0.2 + textW) / 2;
   for (let i = 0; i < CONFIG.SPOTS_TOTAL; i++) {
     const free = i < left;
-    s.addShape(pres.shapes.OVAL, { objectName: `Posto ${i + 1}`, x: cx - spotsW / 2 + i * 0.24, y: 3.04, w: 0.16, h: 0.16, fill: free ? { color: K.alarm } : { color: K.surface }, line: { color: free ? K.alarm : K.muted, width: 1 } });
+    s.addShape(pres.shapes.OVAL, { objectName: `Posto ${i + 1}`, x: sx + i * (dot + dotGap), y: 1.85 + (0.95 - dot) / 2, w: dot, h: dot, fill: free ? { color: K.alarm } : { color: K.surface }, line: { color: free ? K.alarm : K.muted, width: 1.25 } });
   }
-  txt(s, spotsText.map(([t, c]) => ({ text: t, options: { color: c, bold: c === K.alarm } })), { x: cx - spotsW / 2 + dotsW + 0.15, y: 2.97, w: 2.75, h: 0.3, fontFace: MONO, fontSize: 14 });
+  txt(s, spotsText.map(([t, c]) => ({ text: t, options: { color: c } })), { x: sx + dotsW + 0.2, y: 1.85, w: textW, h: 0.95, fontFace: MONO, fontSize: 18, bold: true, valign: "middle" });
 
   s.addShape(pres.shapes.ROUNDED_RECTANGLE, { objectName: "Pulsante chiama", x: px + 0.4, y: 3.6, w: pw - 0.8, h: 0.85, rectRadius: 0.16, fill: { color: K.teal }, line: { type: "none" }, hyperlink: { url: TEL, tooltip: "Chiama la segretaria" } });
   s.addImage({ path: IC.phoneInk, x: cx - 1.5, y: 3.83, w: 0.4, h: 0.4, altText: "Telefono" });
@@ -251,7 +239,7 @@ E non serve saperne di tecnologia. Ci sentiamo, ci raccontate come lavorate, pre
   s.addShape(pres.shapes.RECTANGLE, { objectName: "Link chiamata", x: px + 0.4, y: 3.6, w: pw - 0.8, h: 1.67, fill: { color: K.surface, transparency: 100 }, line: { type: "none" }, hyperlink: { url: TEL, tooltip: "Chiama la segretaria" } });
   txt(s, "Non crederci sulla parola: chiamala e mettila alla prova.", { x: px + 0.3, y: 5.35, w: pw - 0.6, h: 0.3, fontSize: 14, color: K.soft, align: "center" });
   txt(s, `Marco Pontone · Roma${CONFIG.PIVA ? ` · P.IVA ${CONFIG.PIVA}` : ""}`, { x: px + 0.3, y: 5.78, w: pw - 0.6, h: 0.25, fontSize: 11, color: K.muted, align: "center" });
-  s.addNotes(`Il pilota è per ${CONFIG.SPOTS_TOTAL} aziende e chiude ${DAY_LONG} alle ${TIME}. Due settimane gratis sul vostro numero, con i vostri clienti veri. La configurazione la facciamo noi.
+  s.addNotes(`Il pilota è per sole ${CONFIG.SPOTS_TOTAL} aziende. Due settimane gratis sul vostro numero, con i vostri clienti veri. La configurazione la facciamo noi.
 Se dopo decidete di continuare, il primo mese è soddisfatto o rimborsato. Il rischio è nostro, non vostro.
 Chiudete facendo chiamare il numero in sala, in vivavoce: la telefonata è la dimostrazione migliore.`);
 }

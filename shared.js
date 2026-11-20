@@ -2,8 +2,6 @@
 (function () {
   var C = window.CONFIG;
   if (!C) { document.body.insertAdjacentHTML("afterbegin", "<p style='color:red;font:30px sans-serif'>config.js mancante: lancia npm run render</p>"); return; }
-  var deadline = new Date(C.DEADLINE);
-  function part(opts) { return new Intl.DateTimeFormat("it-IT", Object.assign({ timeZone: "Europe/Rome" }, opts)).format(deadline); }
   var fill = function (sel, val) { document.querySelectorAll(sel).forEach(function (el) { el.textContent = val; }); };
 
   fill("[data-phone]", C.PHONE_DISPLAY);
@@ -19,9 +17,7 @@
   document.querySelectorAll("[data-left-text]").forEach(function (el) {
     el.innerHTML = left === 1 ? "Rimane solo <b>1</b> posto" : "Rimangono solo <b>" + left + "</b> posti";
   });
-  fill("[data-day]", part({ day: "numeric" }));
-  fill("[data-month]", part({ month: "short" }).replace(".", "").toUpperCase());
-  fill("[data-time]", part({ hour: "2-digit", minute: "2-digit" }));
+  fill("[data-left]", left);
 
   document.querySelectorAll(".wave").forEach(function (w) {
     var n = Number(w.getAttribute("data-bars")) || 60, html = "";

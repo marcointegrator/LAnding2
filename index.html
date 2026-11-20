@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#04090A">
 <title>Ponteo AI · La segretaria AI che non stacca mai</title>
-<meta name="description" content="Una segretaria AI che risponde al telefono della tua azienda 24 ore su 24. Programma pilota: 2 settimane gratis, solo 3 posti fino al 24 novembre.">
+<meta name="description" content="Una segretaria AI che risponde al telefono della tua azienda 24 ore su 24. Programma pilota: 2 settimane gratis, solo 3 posti.">
 
 <!-- Anteprima link (WhatsApp, Telegram, social). og:image e og:url vengono aggiornati da render.mjs con CONFIG.SITE_URL -->
 <meta property="og:type" content="website">
@@ -17,7 +17,7 @@
 <meta property="og:image" content="https://example.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Ponteo AI: quante chiamate hai perso questa settimana? Pilota gratuito, chiude il 24 novembre.">
+<meta property="og:image:alt" content="Ponteo AI: quante chiamate hai perso questa settimana? Pilota gratuito, solo 3 posti.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Quante chiamate hai perso questa settimana?">
 <meta name="twitter:description" content="Chiama e parla con la segretaria AI. Pilota gratuito, solo 3 posti.">
@@ -50,7 +50,6 @@
   --alarm: #FF2B2B;
   --alarm-glow: rgba(255, 43, 43, 0.45);
 
-  --alarm-dim: #5A1717;
   --ink-on-teal: #03110E;
   --soft: #C3D0CD;
 
@@ -65,7 +64,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-padding-top: 56px; }
+html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   background: var(--bg);
@@ -102,30 +101,6 @@ h2 { font-size: clamp(31px, 8.6vw, 42px); line-height: 1.06; }
   margin-bottom: 16px;
 }
 .lead { color: var(--soft); text-wrap: pretty; }
-
-/* ---------- barra countdown in alto ---------- */
-.topbar {
-  position: sticky; top: 0; z-index: 30;
-  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px;
-  height: 44px;
-  padding: 0 max(var(--gutter), calc((100% - var(--col)) / 2));
-  background: #000;
-  border-bottom: 1px solid var(--alarm);
-  font: 500 11.5px/1 var(--mono);
-  font-variant-numeric: tabular-nums;
-  text-decoration: none;
-  color: var(--soft);
-}
-.tb-live { display: flex; align-items: center; gap: 8px; white-space: nowrap; min-width: 0; }
-.tb-time { justify-self: center; color: var(--alarm); font-weight: 700; font-size: 13.5px; letter-spacing: 0.01em; text-shadow: 0 0 10px var(--alarm-glow); white-space: nowrap; }
-.tb-spots { justify-self: end; white-space: nowrap; }
-.tb-spots b { color: var(--alarm); font-weight: 700; }
-.tb-closed { grid-column: 1 / -1; justify-self: center; color: #fff; font: 500 13px/1 var(--mono); }
-.topbar.is-closed { border-bottom-color: #2a2a2a; }
-.rdot {
-  width: 8px; height: 8px; border-radius: 50%; flex: none;
-  background: var(--alarm); box-shadow: 0 0 8px var(--alarm-glow);
-}
 
 /* ---------- hero ---------- */
 .hero { position: relative; overflow: clip; padding: 12px 0 8px; isolation: isolate; }
@@ -180,46 +155,6 @@ h2 { font-size: clamp(31px, 8.6vw, 42px); line-height: 1.06; }
 .hero .lead strong { font-weight: 500; color: var(--text); }
 .hero .lead { text-align: center; margin: 12px auto 0; max-width: 31em; font-size: 16.5px; line-height: 1.5; }
 
-/* ---------- countdown ---------- */
-.cd { margin-top: 22px; text-align: center; }
-.cd-label {
-  font: 500 12.5px/1 var(--mono); color: var(--alarm);
-  letter-spacing: 0.02em; margin-bottom: 10px;
-}
-.tiles { display: flex; justify-content: center; align-items: flex-start; gap: 4px; }
-.tile { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.val {
-  display: grid; place-items: center;
-  width: clamp(62px, 17.6vw, 86px); height: clamp(62px, 17vw, 78px);
-  background: #000;
-  border: 1px solid var(--alarm-dim);
-  border-radius: 12px;
-  overflow: hidden;
-  font: 700 clamp(36px, 10.8vw, 46px)/1 var(--mono);
-  font-variant-numeric: tabular-nums;
-  color: var(--alarm);
-  text-shadow: 0 0 16px var(--alarm-glow), 0 0 2px rgba(255, 43, 43, 0.5);
-  transition: border-color 0.4s, box-shadow 0.4s;
-}
-.val > span { grid-area: 1 / 1; }
-.val > .in { animation: digIn 0.25s var(--ease); }
-.val > .out { animation: digOut 0.25s var(--ease) forwards; }
-@keyframes digIn { from { transform: translateY(70%); opacity: 0; } }
-@keyframes digOut { to { transform: translateY(-70%); opacity: 0; } }
-.unit { font: 500 11.5px/1 var(--mono); color: var(--muted); letter-spacing: 0.03em; }
-.sep {
-  font: 700 22px/1 var(--mono); color: var(--alarm); opacity: 0.85;
-  height: clamp(62px, 17vw, 78px); display: grid; place-items: center; width: 12px;
-}
-/* ultime 48 ore: bordo rosso pieno */
-[data-urgency="48h"] .val, [data-urgency="day"] .val {
-  border-color: var(--alarm);
-  box-shadow: 0 0 18px -6px var(--alarm-glow), inset 0 0 14px -8px var(--alarm-glow);
-}
-/* ultimo giorno: spariscono i giorni, le ore in evidenza */
-[data-urgency="day"] [data-unit="d"], [data-urgency="day"] [data-unit="d"] + .sep { display: none; }
-[data-urgency="day"] [data-unit="h"] .val { background: #1a0303; box-shadow: 0 0 28px -4px var(--alarm-glow); }
-
 .spots {
   display: flex; align-items: center; justify-content: center; gap: 10px;
   margin-top: 14px;
@@ -232,6 +167,7 @@ h2 { font-size: clamp(31px, 8.6vw, 42px); line-height: 1.06; }
   border: 1.5px solid var(--muted);
 }
 .dots i.free { background: var(--alarm); border-color: var(--alarm); box-shadow: 0 0 8px var(--alarm-glow); }
+.hero .spots { margin-top: 22px; font-size: 15px; }
 
 /* ---------- pulsante principale ---------- */
 .call {
@@ -351,17 +287,13 @@ section.alt { background: var(--bg-2); }
     var(--surface);
   box-shadow: 0 0 0 4px rgba(44, 207, 174, 0.07), 0 0 70px -12px var(--teal-glow);
 }
-.pilot .cd { margin-top: 0; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
-.pilot .val { width: clamp(52px, 14vw, 64px); height: 54px; font-size: clamp(27px, 7.6vw, 32px); border-radius: 10px; }
-.pilot .sep { height: 54px; font-size: 18px; width: 10px; }
-.pilot .eyebrow { margin: 22px 0 12px; }
+.pilot .eyebrow { margin: 0 0 12px; }
 .pilot h2 { font-size: clamp(30px, 8.2vw, 40px); }
 .pilot .sec-text { font-size: 16.5px; }
 .checks { margin-top: 20px; display: grid; gap: 12px; }
 .checks li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; font-weight: 500; line-height: 1.4; }
 .checks svg { width: 22px; height: 22px; color: var(--teal); margin-top: -1px; }
 .pilot .spots { justify-content: flex-start; margin-top: 22px; }
-.deadline { margin-top: 10px; font: 500 13.5px/1.3 var(--mono); color: var(--soft); text-wrap: balance; }
 .pilot .call { margin-top: 18px; }
 .pilot .call-main { font-size: 16.5px; }
 /* modalità chiuso */
@@ -443,18 +375,10 @@ footer {
 .nowrap { white-space: nowrap; }
 
 /* ---------- telefoni stretti (iPhone SE e simili) ---------- */
-@media (max-width: 374px) {
-  .topbar { gap: 6px; font-size: 10.5px; }
-  .tb-time { font-size: 12px; }
-  .tb-live { gap: 6px; }
-}
 @media (max-width: 340px) {
   .hero h1 { margin-top: 14px; font-size: 33px; }
   .hero .lead { margin-top: 10px; font-size: 15px; line-height: 1.42; }
-  .cd { margin-top: 16px; }
-  .cd-label { margin-bottom: 8px; }
-  .val, .sep { height: 54px; }
-  .spots { margin-top: 10px; }
+  .hero .spots { margin-top: 16px; }
 }
 
 /* ---------- desktop ---------- */
@@ -471,9 +395,7 @@ footer {
 /* ---------- movimento (solo se l'utente non lo ha disattivato) ---------- */
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
-  .rdot { animation: blink 1.6s ease-in-out infinite; }
   .tdot::after { animation: ping 2.4s var(--ease) infinite; }
-  .sep { animation: sepBlink 2s ease-in-out infinite; }
   .call::after { animation: ring 2.5s var(--ease) infinite; }
   .call-ic svg { animation: buzz 4s ease-in-out infinite; transform-origin: 50% 60%; }
   .wave i { animation: talk var(--t, 1.6s) ease-in-out infinite; animation-delay: var(--d, 0s); }
@@ -486,8 +408,6 @@ footer {
     }
   }
 }
-@keyframes blink { 50% { opacity: 0.25; } }
-@keyframes sepBlink { 50% { opacity: 0.3; } }
 @keyframes ping { 0% { transform: scale(1); opacity: 0.7; } 80%, 100% { transform: scale(2.8); opacity: 0; } }
 @keyframes ring { 0% { transform: scale(1); opacity: 0.7; } 70%, 100% { transform: scale(1.035, 1.32); opacity: 0; } }
 @keyframes buzz {
@@ -500,19 +420,11 @@ footer {
 @keyframes rise { from { opacity: 0; transform: translateY(18px); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .val > .in, .val > .out { animation: none; }
   .dock { transition: none; }
 }
 </style>
 </head>
 <body>
-
-<a class="topbar" id="topbar" href="#pilota">
-  <span class="tb-live"><span class="rdot" aria-hidden="true"></span><span id="tb-label">Pilota chiude tra</span></span>
-  <span class="tb-time" id="tb-time" aria-hidden="true">--g --:--:--</span>
-  <span class="tb-spots" id="tb-spots"></span>
-  <span class="tb-closed" id="tb-closed" hidden></span>
-</a>
 
 <header class="hero">
   <div class="hero-dots" aria-hidden="true"></div>
@@ -525,20 +437,7 @@ footer {
     <h1>Quante chiamate hai <em>perso</em> questa settimana?</h1>
     <p class="lead">Ognuna era un cliente che poi ha chiamato qualcun altro. <strong>Ponteo AI è una segretaria costruita con l'intelligenza artificiale</strong>: risponde al tuo telefono quando tu non puoi.</p>
 
-    <div class="cd" data-countdown data-open-only aria-live="off">
-      <p class="cd-label" data-cd-label>Il programma pilota chiude tra</p>
-      <p class="sr-only" data-deadline-text>Chiude il 24 novembre alle 23:59</p>
-      <div class="tiles" aria-hidden="true">
-        <div class="tile" data-unit="d"><div class="val"></div><span class="unit">giorni</span></div>
-        <span class="sep">:</span>
-        <div class="tile" data-unit="h"><div class="val"></div><span class="unit">ore</span></div>
-        <span class="sep">:</span>
-        <div class="tile" data-unit="m"><div class="val"></div><span class="unit">min</span></div>
-        <span class="sep">:</span>
-        <div class="tile" data-unit="s"><div class="val"></div><span class="unit">sec</span></div>
-      </div>
-      <p class="spots"><span class="dots" data-dots aria-hidden="true"></span><span data-spots-text></span></p>
-    </div>
+    <p class="spots" id="hero-spots"><span class="dots" data-dots aria-hidden="true"></span><span data-spots-text></span></p>
 
     <a class="call" id="hero-call" data-tel href="#">
       <span class="call-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span>
@@ -614,20 +513,6 @@ footer {
   <section class="pilot-sec" id="pilota">
     <div class="wrap">
       <div class="pilot reveal">
-        <div class="cd" data-countdown data-open-only aria-live="off">
-          <p class="cd-label" data-cd-label>Il programma pilota chiude tra</p>
-          <p class="sr-only" data-deadline-text>Chiude il 24 novembre alle 23:59</p>
-          <div class="tiles" aria-hidden="true">
-            <div class="tile" data-unit="d"><div class="val"></div><span class="unit">giorni</span></div>
-            <span class="sep">:</span>
-            <div class="tile" data-unit="h"><div class="val"></div><span class="unit">ore</span></div>
-            <span class="sep">:</span>
-            <div class="tile" data-unit="m"><div class="val"></div><span class="unit">min</span></div>
-            <span class="sep">:</span>
-            <div class="tile" data-unit="s"><div class="val"></div><span class="unit">sec</span></div>
-          </div>
-        </div>
-
         <p class="eyebrow">- Programma pilota · solo <span data-total>3</span> aziende -</p>
         <h2 id="pilot-title">Provala sul tuo numero. <em>Gratis</em> per 2 settimane.</h2>
         <p class="sec-text lead" id="pilot-text">Cerchiamo <span data-total>3</span> aziende con cui partire. Per 2 settimane la segretaria risponde ai tuoi clienti veri e tu non paghi niente. Se poi decidi di continuare, il primo mese è soddisfatto o rimborsato: se non ti convince, ti restituiamo quello che hai pagato.</p>
@@ -640,7 +525,6 @@ footer {
         </ul>
 
         <p class="spots" data-open-only><span class="dots" data-dots aria-hidden="true"></span><span data-spots-text></span></p>
-        <p class="deadline" data-open-only>Candidature entro <span data-deadline-day>martedì 24 novembre</span></p>
 
         <a class="call" id="pilot-call" data-tel href="#">
           <span class="call-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span>
@@ -678,7 +562,7 @@ footer {
         <span class="call-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span>
         <span class="call-tx"><span class="call-main">Chiama ora</span><span class="call-num" data-phone></span></span>
       </a>
-      <p class="final-line" data-open-only>Il pilota chiude <span data-deadline-day>martedì 24 novembre</span>.<br><span data-final-spots></span></p>
+      <p class="final-line" data-open-only><span data-final-spots></span></p>
     </div>
   </section>
 </main>
@@ -703,7 +587,6 @@ footer {
 const CONFIG = {
   PHONE_TEL: "+390698237052",            // formato per il link tel:
   PHONE_DISPLAY: "06 9823 7052",         // come appare a schermo
-  DEADLINE: "2026-11-24T23:59:59+01:00", // fine pilota, ora di Roma
   SPOTS_TOTAL: 3,                        // posti totali del pilota
   SPOTS_LEFT: 3,                         // lo aggiorno a mano quando entra un'azienda
   SITE_URL: "https://example.com",       // serve per og:image assoluta (senza / finale)
@@ -716,23 +599,10 @@ const CONFIG = {
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var root = document.documentElement;
-  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   var total = Math.max(0, Number(CONFIG.SPOTS_TOTAL) || 0);
   var left = Math.min(total, Math.max(0, Number(CONFIG.SPOTS_LEFT) || 0));
-  var deadline = new Date(CONFIG.DEADLINE).getTime();
 
-  /* ---------- date della scadenza, sempre in ora di Roma ---------- */
-  function fmt(opts) {
-    return new Intl.DateTimeFormat("it-IT", Object.assign({ timeZone: "Europe/Rome" }, opts)).format(deadline);
-  }
-  var dayLong = fmt({ weekday: "long", day: "numeric", month: "long" });  // es. martedì 24 novembre
-  var dayShort = fmt({ day: "numeric", month: "long" });                  // es. 24 novembre
-  var hourMin = fmt({ hour: "2-digit", minute: "2-digit" });              // 23:59
-  var deadlineText = "Chiude il " + dayShort + " alle " + hourMin;
-
-  $$("[data-deadline-day]").forEach(function (el) { el.textContent = dayLong; });
-  $$("[data-deadline-text]").forEach(function (el) { el.textContent = deadlineText; });
   $$("[data-total]").forEach(function (el) { el.textContent = total; });
 
   /* ---------- telefono: unico punto in cui il numero entra nella pagina ---------- */
@@ -776,91 +646,17 @@ const CONFIG = {
   $$("[data-final-spots]").forEach(function (el) {
     el.innerHTML = left === 1 ? "Rimane solo <b>1</b> posto." : "Rimangono solo <b>" + left + "</b> posti.";
   });
-  $("#tb-spots").innerHTML = "<b>" + left + "</b> " + (left === 1 ? "posto" : "posti");
-  $("#topbar").setAttribute("aria-label",
-    "Programma pilota. " + deadlineText + ". " + (left === 1 ? "Rimane solo 1 posto" : "Rimangono solo " + left + " posti") + ". Vai ai dettagli");
-
-  /* ---------- countdown ---------- */
-  var groups = $$("[data-countdown]").map(function (cd) {
-    return {
-      cd: cd,
-      label: $("[data-cd-label]", cd),
-      d: $('[data-unit="d"] .val', cd),
-      h: $('[data-unit="h"] .val', cd),
-      m: $('[data-unit="m"] .val', cd),
-      s: $('[data-unit="s"] .val', cd)
-    };
-  });
-  var tbTime = $("#tb-time"), tbLabel = $("#tb-label");
-
-  // Cambia solo la tessera la cui cifra è cambiata: la vecchia esce in alto, la nuova entra dal basso.
-  function setVal(el, text) {
-    if (el.getAttribute("data-v") === text) return;
-    el.setAttribute("data-v", text);
-    $$(".out", el).forEach(function (o) { o.remove(); });
-    var old = $(".cur", el);
-    var next = document.createElement("span");
-    next.className = "cur";
-    next.textContent = text;
-    if (old) {
-      old.className = "out";
-      if (reduceMotion.matches) old.remove();
-      else old.addEventListener("animationend", function () { old.remove(); }, { once: true });
-      if (!reduceMotion.matches) next.className = "cur in";
-    }
-    el.appendChild(next);
-  }
 
   function pad(n) { return String(n).padStart(2, "0"); }
 
-  var timer = null;
-  function tick() {
-    var ms = deadline - Date.now();   // sempre ricalcolato dall'ora reale
-    if (!(ms > 0)) { closePilot("time"); return; }
-    var t = Math.floor(ms / 1000);
-    var d = Math.floor(t / 86400), h = Math.floor((t % 86400) / 3600), m = Math.floor((t % 3600) / 60), s = t % 60;
-
-    var urgency = t < 86400 ? "day" : t < 172800 ? "48h" : "";
-    if (root.getAttribute("data-urgency") !== urgency) {
-      root.setAttribute("data-urgency", urgency);
-      tbLabel.textContent = urgency === "day" ? "Ultimo giorno" : urgency === "48h" ? "Ultimi 2 giorni" : "Pilota chiude tra";
-      groups.forEach(function (g) {
-        g.label.textContent = urgency === "day" ? "Ultimo giorno per candidarti" : "Il programma pilota chiude tra";
-      });
-    }
-
-    tbTime.textContent = (urgency === "day" ? "" : pad(d) + "g ") + pad(h) + ":" + pad(m) + ":" + pad(s);
-    groups.forEach(function (g) {
-      setVal(g.d, pad(d)); setVal(g.h, pad(h)); setVal(g.m, pad(m)); setVal(g.s, pad(s));
-    });
-  }
-
-  /* ---------- modalità "chiuso" (scadenza passata o posti finiti) ---------- */
-  function closePilot(reason) {
-    if (timer) { clearInterval(timer); timer = null; }
+  /* ---------- modalità "chiuso" (posti finiti) ---------- */
+  if (left === 0) {
     root.classList.add("is-closed");
-    root.removeAttribute("data-urgency");
-    var bar = $("#topbar"), msg = $("#tb-closed");
-    $$(".tb-live, .tb-time, .tb-spots", bar).forEach(function (el) { el.hidden = true; });
-    bar.classList.add("is-closed");
-    msg.hidden = false;
-    msg.textContent = reason === "spots" ? "Posti esauriti. Grazie a chi è entrato." : "Il programma pilota è chiuso.";
-    bar.setAttribute("aria-label", msg.textContent);
-
+    $("#hero-spots").textContent = "Posti esauriti. Grazie a chi è entrato.";
     $("#pilot-title").textContent = "Il programma pilota è chiuso";
     $("#pilot-text").textContent = "Puoi comunque chiamare la segretaria e sentire come funziona. Se ti interessa, lascia a lei il tuo nome e ti ricontattiamo.";
     $("#pilot-call .call-main").textContent = "Chiama e prova la segretaria";
     labelCalls();
-  }
-
-  if (left === 0) {
-    closePilot("spots");
-  } else {
-    tick();
-    if (!root.classList.contains("is-closed")) {
-      // si allinea al cambio del secondo, poi aggiorna ogni secondo
-      setTimeout(function () { tick(); timer = setInterval(tick, 1000); }, (deadline - Date.now()) % 1000 + 20);
-    }
   }
 
   /* ---------- onda sonora (decorativa) ---------- */

@@ -48,9 +48,8 @@ h1 em { color: var(--teal); padding-right: 0.06em; }
 
 .right { display: flex; flex-direction: column; align-items: center; gap: 18px; padding-top: 70px; }
 .label { font: 700 22px/1 var(--mono); color: var(--alarm); text-shadow: 0 0 12px var(--alarm-glow); }
-.tiles { display: flex; gap: 12px; }
 .tile {
-  width: 168px; height: 136px; display: grid; place-items: center;
+  width: 200px; height: 136px; display: grid; place-items: center;
   background: #000; border: 2px solid var(--alarm); border-radius: 18px;
   font: 700 70px/1 var(--mono); color: var(--alarm);
   text-shadow: 0 0 22px var(--alarm-glow), 0 0 3px rgba(255, 43, 43, 0.5);
@@ -71,9 +70,9 @@ h1 em { color: var(--teal); padding-right: 0.06em; }
     <div class="wave" data-bars="72"></div>
   </div>
   <div class="right">
-    <p class="label">Il pilota chiude il</p>
-    <div class="tiles"><div class="tile" data-day>20</div><div class="tile" data-month>NOV</div></div>
-    <p class="badge">Pilota gratuito · solo <span data-total>3</span> posti</p>
+    <p class="label">Posti rimasti</p>
+    <div class="tile" data-left>3</div>
+    <p class="badge">Pilota gratuito · 2 settimane</p>
   </div>
 <script src="shared.js"></script>
 </body>

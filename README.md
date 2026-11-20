@@ -23,7 +23,6 @@ Apri `index.html`, cerca `const CONFIG` e modifica solo lì:
 const CONFIG = {
   PHONE_TEL: "+390600000000",            // formato per il link tel:
   PHONE_DISPLAY: "06 0000 0000",         // come appare a schermo
-  DEADLINE: "2026-11-24T23:59:59+01:00", // fine pilota, ora di Roma
   SPOTS_TOTAL: 3,
   SPOTS_LEFT: 3,                         // lo aggiorno a mano quando entra un'azienda
   SITE_URL: "https://example.com",       // dominio vero, senza / finale
@@ -64,10 +63,3 @@ Abbassa `SPOTS_LEFT`. La pagina scrive "Rimangono solo N posti" e a 1 "Rimane so
 3. Metti quell'indirizzo in `SITE_URL`, rilancia `npm run render` e trascina di nuovo `pubblica/` nella pagina Deploys dello stesso sito.
 
 WhatsApp tiene in cache l'anteprima del link: fai il passo 3 prima di condividere il link la prima volta.
-
-## Come funziona il countdown
-
-- Punta sempre a `DEADLINE` (offset +01:00 esplicito) e ricalcola da `Date.now()` ogni secondo: non si resetta e non usa cookie o localStorage.
-- Ultime 48 ore: tessere con bordo rosso pieno, barra in alto "Ultimi 2 giorni".
-- Ultime 24 ore: spariscono i giorni, le ore vanno in evidenza, il testo diventa "Ultimo giorno per candidarti".
-- Scadenza passata: barra "Il programma pilota è chiuso." e card del pilota in modalità "chiuso".
