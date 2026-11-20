@@ -1,0 +1,140 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "instrument serif",
+        "createdAt": "2026-11-20T05:49:36.447Z",
+        "reason": "user brief: titoli in Instrument Serif con una parola in corsivo verde acqua, richiesti esplicitamente"
+      },
+      {
+        "rule": "oversized-h1",
+        "value": "*",
+        "files": [
+          "locandina.html"
+        ],
+        "createdAt": "2026-11-20T05:49:36.492Z",
+        "reason": "falso positivo: è una tela-immagine da 1080/1200px fotografata per WhatsApp, non una pagina web"
+      },
+      {
+        "rule": "oversized-h1",
+        "value": "*",
+        "files": [
+          "og.html"
+        ],
+        "createdAt": "2026-11-20T05:49:36.512Z",
+        "reason": "falso positivo: è una tela-immagine da 1080/1200px fotografata per WhatsApp, non una pagina web"
+      },
+      {
+        "rule": "icon-tile-stack",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-20T05:49:36.530Z",
+        "reason": "falso positivo: l'icona sta a sinistra del titolo (griglia 44px + 1fr), non sopra"
+      },
+      {
+        "rule": "icon-tile-stack",
+        "value": "*",
+        "files": [
+          "pubblica/index.html"
+        ],
+        "createdAt": "2026-11-20T05:49:36.555Z",
+        "reason": "falso positivo: l'icona sta a sinistra del titolo (griglia 44px + 1fr), non sopra"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-20T05:49:44.617Z",
+        "reason": "user brief: chiesti esplicitamente bagliore verde acqua sulla card e sui pulsanti e cifre rosse con bagliore"
+      },
+      {
+        "rule": "italic-serif-display",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-20T05:49:44.638Z",
+        "reason": "user brief: titoli in Instrument Serif con una parola in corsivo verde acqua, richiesti esplicitamente"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "pubblica/index.html"
+        ],
+        "createdAt": "2026-11-20T05:49:44.661Z",
+        "reason": "user brief: chiesti esplicitamente bagliore verde acqua sulla card e sui pulsanti e cifre rosse con bagliore"
+      },
+      {
+        "rule": "italic-serif-display",
+        "value": "*",
+        "files": [
+          "pubblica/index.html"
+        ],
+        "createdAt": "2026-11-20T05:49:44.682Z",
+        "reason": "user brief: titoli in Instrument Serif con una parola in corsivo verde acqua, richiesti esplicitamente"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "locandina.html"
+        ],
+        "createdAt": "2026-11-20T05:49:44.705Z",
+        "reason": "user brief: chiesti esplicitamente bagliore verde acqua sulla card e sui pulsanti e cifre rosse con bagliore"
+      },
+      {
+        "rule": "italic-serif-display",
+        "value": "*",
+        "files": [
+          "locandina.html"
+        ],
+        "createdAt": "2026-11-20T05:49:44.723Z",
+        "reason": "user brief: titoli in Instrument Serif con una parola in corsivo verde acqua, richiesti esplicitamente"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "og.html"
+        ],
+        "createdAt": "2026-11-20T05:49:44.744Z",
+        "reason": "user brief: chiesti esplicitamente bagliore verde acqua sulla card e sui pulsanti e cifre rosse con bagliore"
+      },
+      {
+        "rule": "italic-serif-display",
+        "value": "*",
+        "files": [
+          "og.html"
+        ],
+        "createdAt": "2026-11-20T05:49:44.764Z",
+        "reason": "user brief: titoli in Instrument Serif con una parola in corsivo verde acqua, richiesti esplicitamente"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "volantino.html"
+        ],
+        "createdAt": "2026-11-20T05:49:44.786Z",
+        "reason": "user brief: chiesti esplicitamente bagliore verde acqua sulla card e sui pulsanti e cifre rosse con bagliore"
+      },
+      {
+        "rule": "italic-serif-display",
+        "value": "*",
+        "files": [
+          "volantino.html"
+        ],
+        "createdAt": "2026-11-20T05:49:44.808Z",
+        "reason": "user brief: titoli in Instrument Serif con una parola in corsivo verde acqua, richiesti esplicitamente"
+      }
+    ]
+  }
+}
